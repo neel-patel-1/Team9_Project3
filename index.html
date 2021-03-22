@@ -1,49 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>three.js webgl - clipIntersection</title>
+		<title>three.js webgl </title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style> 
+			body {margin: 0;}
+		</style>
 		<!--<link type="text/css" rel="stylesheet" href="main.css">-->
 	</head>
 	<body>
         <script src='three.js'></script>
 		<script>
-			const scene =  new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
-            const renderer = new THREE.WebGLRenderer();
-            renderer.setSize( window.innerWidth, window.innerHeight );
-            document.body.appendChild( renderer.domElement );
+			
 
             // const geometry = new THREE.BoxGeometry();
             // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
             // const cube = new THREE.Mesh( geometry, material );
             // scene.add( cube );
 
+            
+            function drawLines()
+            {
+                let gameSkin = document.createElement('canvas');	
+            
+                gameSkin.width = 2*Math.PI*50;
+                gameSkin.height = 2*Math.PI*20;
+                let context = gameSkin.getContext('2d');
+                context.fillStyle = '#ffffff';
+                context.fillRect(0, 0, gameSkin.width, gameSkin.height);
+                //context.strokeStyle = '#ff00ff';
+                //context.strokeRect(0, 0, gameSkin.width, gameSkin.height);
+                var texture = new THREE.CanvasTexture(gameSkin);
+                texture.needsUpdate = true;
+                
+                for(let i=0; i<2; i++)
+                {
+                    context.fillStyle = '#FFF';
+                    context.beginPath();
+                    context.moveTo((gameSkin.height/3)*i, 0);
+                    context.lineTo((gameSkin.height/3)*i, gameSkin.width);
+                    context.strokeStyle = '#ff0000';
+                    context.lineWidth = 2;
+                    context.stroke();
+
+                    // context.beginPath();
+                    // context.moveTo(gameSkin.height ,120+ (i*120));
+                    // context.lineTo(320,120+ (i*120));
+                    // context.strokeStyle = '#ff0000';
+                    // context.lineWidth = 2;
+                    // context.stroke();
+
+                    // context.beginPath();
+                    // context.moveTo(120 + (i*120),20);
+                    // context.lineTo(120+ (i*120),320);
+                    // context.strokeStyle = '#ff0000';
+                    // context.lineWidth = 2;
+                    // context.stroke();
+                }
+                return texture;
+            }
+            
+            // function createTorus() {
+            //     return new THREE.Mesh(
+            //         new THREE.TorusGeometry(1, 0.4, 20, 50),
+            //         new THREE.MeshBasicMaterial({ 
+            //             //map: drawLines(),
+            //             color: '#ffffff',
+            //         }));
+            // }
+
+            let torus = new THREE.Mesh(
+                new THREE.TorusGeometry(1, 0.4, 20, 50),
+                new THREE.MeshBasicMaterial({ 
+                    map: drawLines(),
+                    //color: '#ffffff',
+            }));
+
+            const scene =  new THREE.Scene();
+
+            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
             camera.position.set(5,0,0);
             camera.lookAt(0,0,0);
-			const geometry = new THREE.TorusGeometry(1, 0.4, 20, 50);
-            const material = new THREE.LineDashedMaterial( {
-                color: 0xffffff,
-                linewidth: 1,
-                scale: 1,
-                dashSize: 3,
-                gapSize: 1,
-            } );
-            const torus = new THREE.Wireframe( geometry, material );
+
+            
+
+            
+            // const geometry = new THREE.TorusGeometry(1, 0.4, 20, 50);
+            // const material = new THREE.MeshBasicMaterial({ 
+            //     map: texture,
+            // });
+            //const torus = new THREE.Mesh( geometry, material );
             scene.add( torus );
 
+            
+
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+
             function animate() {
-            requestAnimationFrame( animate );
-            torus.rotation.x+=.01;
-            torus.rotation.y+=.01;
-            renderer.render( scene, camera );
+                requestAnimationFrame( animate );
+                
+                //scene.add(createTorus().rotationx+=1);
+                //torus.rotation.x+=.01;
+                torus.rotation.y+=.01;
+                //drawLines();
+                renderer.render( scene, camera );
             }
             animate();
 
 		</script>
-        <script src = "torustictactoe.js"></script>
+		<!--<script src = "torustictactoe.js"></script>-->
 
 	</body>
 </html>
