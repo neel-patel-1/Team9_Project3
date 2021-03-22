@@ -12,69 +12,43 @@
 	<body>
         <script src='three.js'></script>
 		<script>
-			
-
-            // const geometry = new THREE.BoxGeometry();
-            // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-            // const cube = new THREE.Mesh( geometry, material );
-            // scene.add( cube );
-
-            
+			           
             function drawLines()
             {
                 let gameSkin = document.createElement('canvas');	
             
-                gameSkin.width = 2*Math.PI*50;
-                gameSkin.height = 2*Math.PI*20;
+                gameSkin.width = 100;
+                gameSkin.height = 50;
                 let context = gameSkin.getContext('2d');
                 context.fillStyle = '#ffffff';
                 context.fillRect(0, 0, gameSkin.width, gameSkin.height);
-                //context.strokeStyle = '#ff00ff';
-                //context.strokeRect(0, 0, gameSkin.width, gameSkin.height);
                 var texture = new THREE.CanvasTexture(gameSkin);
                 texture.needsUpdate = true;
                 
-                for(let i=0; i<2; i++)
+                for(let i=0; i<3; i++)
                 {
-                    context.fillStyle = '#FFF';
                     context.beginPath();
-                    context.moveTo((gameSkin.height/3)*i, 0);
-                    context.lineTo((gameSkin.height/3)*i, gameSkin.width);
-                    context.strokeStyle = '#ff0000';
-                    context.lineWidth = 2;
+                    context.moveTo((gameSkin.width/3)*i, 0);
+                    context.lineTo((gameSkin.width/3)*i, gameSkin.height);
+                    context.strokeStyle = '#000000';
+                    context.lineWidth = 3;
                     context.stroke();
 
-                    // context.beginPath();
-                    // context.moveTo(gameSkin.height ,120+ (i*120));
-                    // context.lineTo(320,120+ (i*120));
-                    // context.strokeStyle = '#ff0000';
-                    // context.lineWidth = 2;
-                    // context.stroke();
-
-                    // context.beginPath();
-                    // context.moveTo(120 + (i*120),20);
-                    // context.lineTo(120+ (i*120),320);
-                    // context.strokeStyle = '#ff0000';
-                    // context.lineWidth = 2;
-                    // context.stroke();
+                    context.beginPath();
+                    context.moveTo(0, (gameSkin.height/3)*i);
+                    context.lineTo(gameSkin.width, (gameSkin.height/3)*i);
+                    context.strokeStyle = '#000000';
+                    context.lineWidth = 3;
+                    context.stroke();
                 }
                 return texture;
             }
             
-            // function createTorus() {
-            //     return new THREE.Mesh(
-            //         new THREE.TorusGeometry(1, 0.4, 20, 50),
-            //         new THREE.MeshBasicMaterial({ 
-            //             //map: drawLines(),
-            //             color: '#ffffff',
-            //         }));
-            // }
 
             let torus = new THREE.Mesh(
-                new THREE.TorusGeometry(1, 0.4, 20, 50),
+                new THREE.TorusGeometry(1, 0.8, 20, 50),
                 new THREE.MeshBasicMaterial({ 
                     map: drawLines(),
-                    //color: '#ffffff',
             }));
 
             const scene =  new THREE.Scene();
@@ -83,17 +57,7 @@
             camera.position.set(5,0,0);
             camera.lookAt(0,0,0);
 
-            
-
-            
-            // const geometry = new THREE.TorusGeometry(1, 0.4, 20, 50);
-            // const material = new THREE.MeshBasicMaterial({ 
-            //     map: texture,
-            // });
-            //const torus = new THREE.Mesh( geometry, material );
             scene.add( torus );
-
-            
 
             const renderer = new THREE.WebGLRenderer();
             renderer.setSize( window.innerWidth, window.innerHeight );
@@ -101,17 +65,11 @@
 
             function animate() {
                 requestAnimationFrame( animate );
-                
-                //scene.add(createTorus().rotationx+=1);
-                //torus.rotation.x+=.01;
                 torus.rotation.y+=.01;
-                //drawLines();
                 renderer.render( scene, camera );
             }
             animate();
 
 		</script>
-		<!--<script src = "torustictactoe.js"></script>-->
-
 	</body>
 </html>
