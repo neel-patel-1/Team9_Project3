@@ -13,12 +13,13 @@
         <div id="3d"></div>
         <div id="2d"></div>
         <script src='three.js'></script>
+        <script src='OrbitControls.js'></script>
 		<script>
 
             let game = {
                 board: [['O','O','O'],
                         ['X','O','X'],
-                        ['X','X','X']],
+                        ['O','X','X']],
                 next: "X", 
             }
 			           
@@ -68,6 +69,7 @@
                 return texture;
             }
             
+            
 
             let torus = new THREE.Mesh(
                 new THREE.TorusGeometry(1, 0.5, 20, 50),
@@ -75,12 +77,11 @@
                     map: drawLines(),
             }));
 
-            const scene =  new THREE.Scene();
-
             const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
             camera.position.set(0,0,-5);
             camera.lookAt(0,0,0);
 
+            const scene =  new THREE.Scene();
             scene.add( torus );
 
             const renderer = new THREE.WebGLRenderer();
@@ -89,11 +90,12 @@
 
             function animate() {
                 requestAnimationFrame( animate );
-                torus.rotation.y+=.05;
+                //torus.rotation.y+=.05;
                 renderer.render( scene, camera );
 
             }
             animate();
+            const controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 		</script>
 	</body>
