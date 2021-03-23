@@ -10,15 +10,24 @@
 		<!--<link type="text/css" rel="stylesheet" href="main.css">-->
 	</head>
 	<body>
+        <div id="3d"></div>
+        <div id="2d"></div>
         <script src='three.js'></script>
 		<script>
+
+            let game = {
+                board: [['O','O','O'],
+                        ['X','O','X'],
+                        ['X','X','X']],
+                next: "X", 
+            }
 			           
             function drawLines()
             {
                 let gameSkin = document.createElement('canvas');	
             
-                gameSkin.width = 100;
-                gameSkin.height = 50;
+                gameSkin.width = 400;
+                gameSkin.height = 200;
                 let context = gameSkin.getContext('2d');
                 context.fillStyle = '#ffffff';
                 context.fillRect(0, 0, gameSkin.width, gameSkin.height);
@@ -31,22 +40,37 @@
                     context.moveTo((gameSkin.width/3)*i, 0);
                     context.lineTo((gameSkin.width/3)*i, gameSkin.height);
                     context.strokeStyle = '#000000';
-                    context.lineWidth = 3;
+                    context.lineWidth = 2;
                     context.stroke();
 
                     context.beginPath();
                     context.moveTo(0, (gameSkin.height/3)*i);
                     context.lineTo(gameSkin.width, (gameSkin.height/3)*i);
                     context.strokeStyle = '#000000';
-                    context.lineWidth = 3;
+                    context.lineWidth = 2;
                     context.stroke();
+
+                    context.font = '50pt Arial';
+                    context.fillStyle = '#ff0000';
+                    
                 }
+                for(let i=0; i<3; i++){
+                    for(let j=0; j<3; j++)
+                    {
+                        let character = game.board[i][j];
+                        if(character!= '.')
+                        {
+                            context.fillText(character,(gameSkin.width/9)+(gameSkin.width/3)*j, (gameSkin.height*3/10)+(gameSkin.height/3)*i)
+                        }
+                    }
+                }
+                document.getElementById("2d").appendChild(gameSkin);
                 return texture;
             }
             
 
             let torus = new THREE.Mesh(
-                new THREE.TorusGeometry(1, 0.8, 20, 50),
+                new THREE.TorusGeometry(1, 0.5, 20, 50),
                 new THREE.MeshBasicMaterial({ 
                     map: drawLines(),
             }));
@@ -54,19 +78,20 @@
             const scene =  new THREE.Scene();
 
             const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-            camera.position.set(5,0,0);
+            camera.position.set(0,0,-5);
             camera.lookAt(0,0,0);
 
             scene.add( torus );
 
             const renderer = new THREE.WebGLRenderer();
             renderer.setSize( window.innerWidth, window.innerHeight );
-            document.body.appendChild( renderer.domElement );
+            document.getElementById("3d").appendChild( renderer.domElement );
 
             function animate() {
                 requestAnimationFrame( animate );
-                torus.rotation.y+=.01;
+                torus.rotation.y+=.05;
                 renderer.render( scene, camera );
+
             }
             animate();
 
