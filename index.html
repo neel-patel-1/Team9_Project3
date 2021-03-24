@@ -17,6 +17,8 @@
 		<script>
 
             //initialize camera, scene, renderer, add Orbital Controls
+            const R = 5
+            const r = 2.5;
             const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
             camera.position.set(0,0,30);
             camera.lookAt(0,0,0);
@@ -27,19 +29,27 @@
             renderer.setSize( window.innerWidth, window.innerHeight );
             document.getElementById("3d").appendChild( renderer.domElement );
 
+            let gameSkin = document.createElement('canvas');	
+            gameSkin.width = 400;
+            gameSkin.height = 200;
+            let context = gameSkin.getContext('2d');
+            var texture = new THREE.CanvasTexture(gameSkin);
+            texture.needsUpdate = true;
+
             const controls = new THREE.OrbitControls( camera, renderer.domElement );
             controls.minDistance = 5;
 
             let game = {//game logic
-                board: [['O','O','O'],
-                        ['X','O','X'],
-                        ['O','X','X']],
+                board: [['.','.','.'],
+                        ['.','.','.'],
+                        ['.','.','.']],
                 next: "X", 
+                newMove: false,
             }
 
             //create torus mesh and add to scene 
             let torus = new THREE.Mesh(
-                new THREE.TorusGeometry(5, 2.5, 20, 50),
+                new THREE.TorusGeometry(R, r, 20, 50),
                 new THREE.MeshBasicMaterial({ 
                     map: drawLines(),
             }));
@@ -49,33 +59,89 @@
             const raycaster = new THREE.Raycaster();//shoots rays
 
             
-            let intersections, z;
+            let intersections, x,y,z;
 
             window.addEventListener( 'mousemove', onMouseMove, false );//keep ptr coordinates up to date  
             window.addEventListener('click', () => //on click, check if torus hit
             {
                 intersections = raycaster.intersectObject(torus);
-                if (intersections.length>0)
+                
+                if(intersections.length>0)
                 {
-                    //console.log(Math.asin(intersections[0].point.z/2.5));
-                    z=intersections[0].point.z
-                    console.log(intersections[0].point);
-                    console.log(Math.sqrt( Math.pow((intersections[0].point.x),2) +  Math.pow((intersections[0].point.y),2) ))
-                    //console.log();
+                    if(setBoardPos(intersections[0]) === true)
+                    {
+                        game.newMove = true
+                        if(game.next === 'O'){
+                            game.next = 'X';
+                        }
+                        else{
+                            game.next = 'O';
+                        }
+                    }
                 }
+                
             });
+            
             
             scene.add( torus );
 
             animate();//start animation
-            
-			
+
+			function setBoardPos(intersect)
+            {
+                x = intersect.point.x;
+                y = intersect.point.y;
+                z = intersect.point.z;
+                let row, col;
+                if(Math.sqrt(Math.pow(x,2) + Math.pow(y,2)) < (R + (r*Math.cos(2*Math.PI/3))) ){
+                    row = 1;
+                    console.log("Board[1]");
+                }
+                else{
+                    if(z>0){
+                        row = 2;
+                        console.log("Board[2]");
+                    }
+                    else{
+                        row = 0;
+                        console.log("Board[0]");
+                    }
+                }
+                if( x < Math.sqrt(Math.pow(x,2) + Math.pow(y,2))*Math.cos(2*Math.PI/3) ){
+                    col = 1;
+                    console.log('[1]');
+                }
+                else{
+                    if(y>0){
+                        col = 0;
+                        console.log('[0]');
+                    }
+                    else{
+                        col = 2;
+                        console.log('[2]');
+                    }
+                }
+                if(game.board[row][col] === '.'){
+                    game.board[row][col] = game.next;
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+
             function onMouseMove( event ) {//helper function, gets mouse x and y coordinates
                 mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
                 mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
             }
 
             function animate() {//function animating the scene
+                //if drawUpdate -> draw, setDrawUpdate false
+                if(game.newMove){
+                    drawLines();
+                    game.newMove = false;
+                    texture.needsUpdate = true;
+                }
                 requestAnimationFrame( animate );
                 renderer.render( scene, camera );
                 raycaster.setFromCamera(mouse, camera);//rays shot from camera
@@ -83,16 +149,10 @@
             }
             
             function drawLines(){//function for drawing on torus
-                let gameSkin = document.createElement('canvas');	
-            
-                gameSkin.width = 400;
-                gameSkin.height = 200;
-                let context = gameSkin.getContext('2d');
+                
+                
                 context.fillStyle = '#ffffff';
                 context.fillRect(0, 0, gameSkin.width, gameSkin.height);
-                var texture = new THREE.CanvasTexture(gameSkin);
-                texture.needsUpdate = true;
-                
                 for(let i=0; i<3; i++)
                 {
                     context.beginPath();
