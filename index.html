@@ -16,15 +16,69 @@
         <script src='OrbitControls.js'></script>
 		<script>
 
-            let game = {
+            //initialize camera, scene, renderer, add Orbital Controls
+            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            camera.position.set(0,0,15);
+            camera.lookAt(0,0,0);
+
+            const scene =  new THREE.Scene();
+
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.getElementById("3d").appendChild( renderer.domElement );
+
+            const controls = new THREE.OrbitControls( camera, renderer.domElement );
+            controls.minDistance = 5;
+
+            let game = {//game logic
                 board: [['O','O','O'],
                         ['X','O','X'],
                         ['O','X','X']],
                 next: "X", 
             }
-			           
-            function drawLines()
+
+            //create torus mesh and add to scene 
+            let torus = new THREE.Mesh(
+                new THREE.TorusGeometry(5, 2.5, 20, 50),
+                new THREE.MeshBasicMaterial({ 
+                    map: drawLines(),
+            }));
+
+            
+            const mouse = new THREE.Vector2();//coordinates of mouse
+            const raycaster = new THREE.Raycaster();//shoots rays
+
+            
+            let intersections;
+
+            window.addEventListener( 'mousemove', onMouseMove, false );//keep ptr coordinates up to date  
+            window.addEventListener('click', () => //on click, check if torus hit
             {
+                intersections = raycaster.intersectObject(torus);
+                if (intersections.length>0)
+                {
+                    console.log(intersections[0].point)
+                }
+            });
+            
+            scene.add( torus );
+
+            animate();//start animation
+            
+			
+            function onMouseMove( event ) {//helper function, gets mouse x and y coordinates
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+            }
+
+            function animate() {//function animating the scene
+                requestAnimationFrame( animate );
+                renderer.render( scene, camera );
+                raycaster.setFromCamera(mouse, camera);//rays shot from camera
+                
+            }
+            
+            function drawLines(){//function for drawing on torus
                 let gameSkin = document.createElement('canvas');	
             
                 gameSkin.width = 400;
@@ -69,33 +123,6 @@
                 return texture;
             }
             
-            
-
-            let torus = new THREE.Mesh(
-                new THREE.TorusGeometry(1, 0.5, 20, 50),
-                new THREE.MeshBasicMaterial({ 
-                    map: drawLines(),
-            }));
-
-            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-            camera.position.set(0,0,-5);
-            camera.lookAt(0,0,0);
-
-            const scene =  new THREE.Scene();
-            scene.add( torus );
-
-            const renderer = new THREE.WebGLRenderer();
-            renderer.setSize( window.innerWidth, window.innerHeight );
-            document.getElementById("3d").appendChild( renderer.domElement );
-
-            function animate() {
-                requestAnimationFrame( animate );
-                //torus.rotation.y+=.05;
-                renderer.render( scene, camera );
-
-            }
-            animate();
-            const controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 		</script>
 	</body>
