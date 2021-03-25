@@ -65,7 +65,7 @@
 
             window.addEventListener( 'mousemove', onMouseMove, false );//keep ptr coordinates up to date  
             window.addEventListener('resize', onWindowResize, false);
-            window.addEventListener('click', () => //on click, check if torus hit
+            window.addEventListener('dblclick', () => //on click, check if torus hit
             {
                 intersections = raycaster.intersectObject(torus);
                 
@@ -122,7 +122,7 @@
                     drawLines(true, 'rd');
                     return true;
                 }
-                else if ( (game.board[(game.row+1)%3][(game.col-1)%3] === game.next && game.board[(game.row+2)%3][(game.col-2)%3] === game.next) ){
+                else if ( (game.board[(game.row+1)%3][mod(game.col-1,3)] === game.next && game.board[(game.row+2)%3][mod(game.col-2,3)] === game.next) ){
                     drawLines(true, 'ld');
                     return true;
                 }
@@ -257,8 +257,8 @@
                         case 'ld':
                             for(let i=0; i<3; i++){
                                 context.beginPath();
-                                context.moveTo( ((game.col+i)%3+1) * (gameSkin.width/3), ((game.row+i)%3) *(gameSkin.height/3));
-                                context.lineTo( ((game.col+i)%3) * (gameSkin.width/3), ((game.row+i)%3+1) *(gameSkin.height/3))
+                                context.moveTo( (mod(game.col-i,3)+1) * (gameSkin.width/3), ((game.row+i)%3) *(gameSkin.height/3));
+                                context.lineTo( mod(game.col-i,3) * (gameSkin.width/3), ((game.row+i)%3+1) *(gameSkin.height/3))
                                 context.stroke();
                             }
                             break;
@@ -267,7 +267,9 @@
                 document.getElementById("2d").appendChild(gameSkin);
                 return texture;
             }
-            
+            function mod(n, m) {
+                return ((n % m) + m) % m;
+            }
 
 		</script>
 	</body>
