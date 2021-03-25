@@ -76,8 +76,7 @@
                         if(checkWin()){
                             console.log(game.next, 'won');
                             game.winner = game.next;
-                            drawLines();
-                            //drawWinnerLine
+                            //drawLines();
                             texture.needsUpdate = true;
                         }
                         else{
@@ -103,43 +102,34 @@
             function checkWin()
             {
                 //check horizontal, check vertical, check diagonal right, check diagonal left
-                if( (game.board[(game.row + 1)%3][game.col] === game.next && game.board[(game.row + 2)%3][game.col] === game.next) 
+                /*if( (game.board[(game.row + 1)%3][game.col] === game.next && game.board[(game.row + 2)%3][game.col] === game.next) 
                 || (game.board[game.row][(game.col+1)%3] === game.next && game.board[game.row][(game.col+ 2)%3] === game.next) 
                 || (game.board[(game.row+1)%3][(game.col+1)%3] === game.next && game.board[(game.row+2)%3][(game.col+2)%3] === game.next) 
                 || (game.board[(game.row+1)%3][(game.col-1)%3] === game.next && game.board[(game.row+2)%3][(game.col-2)%3] === game.next)){
                     return true;
-                }
-                /*
+                }*/
+                
                 if( (game.board[game.row][(game.col+1)%3] === game.next && game.board[game.row][(game.col+ 2)%3] === game.next) ){
-                    context.beginPath();
-                    context.strokeStyle = '#00FF00';
-                    context.lineWidth = 2;
-                    context.moveTo((gameSkin.width/6)+(gameSkin.width/3)*game.row, 0);
-                    context.lineTo((gameSkin.width/6)+(gameSkin.width/3)*game.row, gameSkin.height);
-                    context.stroke();
+                    drawLines(true, 'hor');
                     return true;
-
                 }
                 else if( (game.board[(game.row + 1)%3][game.col] === game.next && game.board[(game.row + 2)%3][game.col] === game.next) )
                 {
-                    context.beginPath();
-                    context.strokeStyle = '#00FF00';
-                    context.lineWidth = 2;
-                    context.moveTo(0, (gameSkin.height/6)+(gameSkin.height/3)*game.col);
-                    context.lineTo(gameSkin.width, (gameSkin.height/6)+(gameSkin.height/3)*game.col);
-                    context.stroke();
+                    drawLines(true, 'ver');
                     return true;
                 }
                 else if( (game.board[(game.row+1)%3][(game.col+1)%3] === game.next && game.board[(game.row+2)%3][(game.col+2)%3] === game.next) ){
+                    drawLines(true, 'rd');
                     return true;
                 }
                 else if ( (game.board[(game.row+1)%3][(game.col-1)%3] === game.next && game.board[(game.row+2)%3][(game.col-2)%3] === game.next) ){
+                    drawLines(true, 'ld');
                     return true;
                 }
                 else{
                     return false;
                 }
-                */
+                
             }
 			function setBoardPos(intersect)
             {
@@ -203,7 +193,7 @@
                 
             }
             
-            function drawLines(){//function for drawing on torus
+            function drawLines(winner, dir){//function for drawing on torus
                 
                 
                 context.fillStyle = '#ffffff';
@@ -236,6 +226,42 @@
                         {
                             context.fillText(character,(gameSkin.width/9)+(gameSkin.width/3)*j, (gameSkin.height*3/10)+(gameSkin.height/3)*i)
                         }
+                    }
+                }
+                if(winner)
+                {
+                    context.strokeStyle = '#00FF00';
+                    context.lineWidth = 2;
+                    switch(dir){
+                        case 'hor':
+                            context.beginPath();
+                            context.moveTo(0, (gameSkin.height*game.row/3)+(gameSkin.height/6));
+                            context.lineTo(gameSkin.width, (gameSkin.height*game.row/3)+(gameSkin.height/6));
+                            context.stroke();
+                            break;
+                        case 'ver':
+                            context.beginPath();
+                            context.moveTo((gameSkin.width*game.row/3)+(gameSkin.width/6), 0);
+                            context.lineTo((gameSkin.width*game.row/3)+(gameSkin.width/6), gameSkin.height);
+                            context.stroke();
+                            break;
+                        case 'rd':
+                            context.beginPath();
+                            for(let i=0; i<3; i++){
+                                context.beginPath();
+                                context.moveTo( ((game.col+i)%3) * (gameSkin.width/3), ((game.row+i)%3) *(gameSkin.height/3));
+                                context.lineTo( ((game.col+i)%3+1) * (gameSkin.width/3), ((game.row+i)%3+1) *(gameSkin.height/3));
+                                context.stroke();
+                            }
+                            break;
+                        case 'ld':
+                            for(let i=0; i<3; i++){
+                                context.beginPath();
+                                context.moveTo( ((game.col+i)%3+1) * (gameSkin.width/3), ((game.row+i)%3) *(gameSkin.height/3));
+                                context.lineTo( ((game.col+i)%3) * (gameSkin.width/3), ((game.row+i)%3+1) *(gameSkin.height/3))
+                                context.stroke();
+                            }
+                            break;
                     }
                 }
                 document.getElementById("2d").appendChild(gameSkin);
