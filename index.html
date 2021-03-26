@@ -6,11 +6,21 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style> 
 			body {margin: 0;}
+            #info {
+                color:#ffffff;
+                position: absolute;
+                top: 10px;
+                width: 100%;
+                text-align: center;
+                z-index: 100;
+                display:block;
+            }
 		</style>
 		<!--<link type="text/css" rel="stylesheet" href="main.css">-->
 	</head>
 	<body>
         <div id="3d"></div>
+        <div id="info">Double-Click To Place X or O</div>
         <div id="2d"></div>
         <script src='three.js'></script>
         <script src='OrbitControls.js'></script>
