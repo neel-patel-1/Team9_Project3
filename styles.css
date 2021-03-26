@@ -1,5 +1,8 @@
 .widget-menu {
     height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -14,3 +17,4 @@
 .widget-menu button:hover {
     background-color: #ccc; /* Dark grey background on mouse-over */
 }
+

@@ -12,7 +12,7 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
     const scene =  new THREE.Scene();
 
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth*2/3, window.innerHeight*2/3 );
     document.getElementById("game").appendChild( renderer.domElement );
 
     let gameSkin = document.createElement('canvas');	
