@@ -1,0 +1,16 @@
+.widget-menu {
+    height: 200px;
+}
+
+
+.widget-menu button {
+    background-color: black; /* Grey background color */
+    color: white; /* Black text color */
+    display: inline-block; /* Make the links appear below each other */
+    padding: 50px; /* Add some padding */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.widget-menu button:hover {
+    background-color: #ccc; /* Dark grey background on mouse-over */
+}
