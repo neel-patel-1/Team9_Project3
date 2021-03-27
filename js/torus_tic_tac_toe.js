@@ -12,7 +12,7 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
     const scene =  new THREE.Scene();
 
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth*2/3, window.innerHeight*2/3 );
+    renderer.setSize( window.innerWidth, window.innerHeight );
     document.getElementById("game").appendChild( renderer.domElement );
 
     let gameSkin = document.createElement('canvas');	
@@ -221,8 +221,8 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
                     break;
                 case 'ver':
                     context.beginPath();
-                    context.moveTo((gameSkin.width*game.row/3)+(gameSkin.width/6), 0);
-                    context.lineTo((gameSkin.width*game.row/3)+(gameSkin.width/6), gameSkin.height);
+                    context.moveTo((gameSkin.width*game.col/3)+(gameSkin.width/6), 0);
+                    context.lineTo((gameSkin.width*game.col/3)+(gameSkin.width/6), gameSkin.height);
                     context.stroke();
                     break;
                 case 'rd':
