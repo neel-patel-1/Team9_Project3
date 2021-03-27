@@ -1,3 +1,7 @@
+body{
+    background-color: #e0df79;
+}
+
 .widget-menu {
     height: 200px;
     display: flex;
@@ -18,3 +22,7 @@
     background-color: #ccc; /* Dark grey background on mouse-over */
 }
 
+canvas {
+    display: block;
+    margin: 0 auto;
+}
