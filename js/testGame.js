@@ -1,23 +1,67 @@
 document.querySelector('#testGame').addEventListener('click', () => {
     document.querySelector('#game').textContent = ' ';
-
-
     const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.set(0,0,30);
+    camera.position.set(0,0,5);
     camera.lookAt(0,0,0);
-
     const scene =  new THREE.Scene();
 
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth, window.innerHeight);
     document.getElementById("game").appendChild( renderer.domElement );
 
     const mouse = new THREE.Vector2();//coordinates of mouse
+    const geometry = new THREE.PlaneGeometry( .4, .4);
+    //const material = new THREE.MeshBasicMaterial( {color: /*0x00838f*/Math.random() * 0xffffff, side: THREE.FrontSide} );
 
+    const raycaster = new THREE.Raycaster();//shoots rays
+
+    renderer.domElement.addEventListener('mousedown', (event) => {
+        console.log("x:",mouse.x, "y:", mouse.y);
+        const intersects = raycaster.intersectObjects( scene.children );
+        if(intersects[0]){
+            intersects[ 0 ].object.material.color.set( 0xff0000 );
+        }
+    });
+
+    for(let i=-2.0; i<=2.0; i+=.5)
+    {
+        for(let j=-2.0; j<=2.0; j+=.5)
+        {
+            const plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0x00838f + i*0xffffff*1/16, side: THREE.FrontSide} ) );
+            plane.position.x = i;
+            plane.position.y = j;
+            scene.add( plane );
+        }
+    }
     
     
+    animate();
 
+    function animate() {//function animating the scene
+        //if drawUpdate -> draw, setDrawUpdate false
+        
+        requestAnimationFrame( animate );
+        raycaster.setFromCamera(mouse, camera);
 
+        renderer.render( scene, camera );
+        /*
+        if (hasWon)
+        {
+            for(let i=-2.5; i<=2.5; i+=.5)
+            {
+                for(let j=-2.5; j<=2.5; j+=.5)
+                {
+                    const plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: Math.random() * 0xffffff, side: THREE.FrontSide} ) );
+                    plane.position.x = i;
+                    plane.position.y = j;
+                    scene.add( plane );
+                }
+            }
+        }
+        */
+        
+        
+    }
     //helper functions
     window.addEventListener( 'mousemove', onMouseMove, false );//keep ptr coordinates up to date  
     window.addEventListener('resize', onWindowResize, false);
