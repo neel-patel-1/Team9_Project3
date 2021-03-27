@@ -47,11 +47,11 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
     const raycaster = new THREE.Raycaster();//shoots rays
 
 
-    let intersections, x,y,z;
+    let intersections;
 
-    window.addEventListener( 'mousemove', onMouseMove, false );//keep ptr coordinates up to date  
+    renderer.domElement.addEventListener( 'mousemove', onMouseMove, false );//keep ptr coordinates up to date  
     window.addEventListener('resize', onWindowResize, false);
-    window.addEventListener('dblclick', () => //on click, check if torus hit
+    renderer.domElement.addEventListener('dblclick', () => //on click, check if torus hit
     {
         intersections = raycaster.intersectObject(torus);
         
@@ -153,6 +153,7 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
         var rect = renderer.domElement.getBoundingClientRect();
         mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
         mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
+        console.log(mouse.x,mouse.y);
     }
 
     function onWindowResize(){
