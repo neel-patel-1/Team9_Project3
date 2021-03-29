@@ -21,11 +21,11 @@ document.querySelector('#testGame').addEventListener('click', () => {
         toRotate: Array(),
         rotate: function(){ 
             for(let i=0; i<this.toRotate.length; i++){
-                if(this.toRotate[i].object.rotation.y < (Math.PI-.1) ){
-                    this.toRotate[i].object.rotation.y+=.03;
+                if(this.toRotate[i].rotation.y < (Math.PI-.1) ){
+                    this.toRotate[i].rotation.y+=.03;
                 }
                 else{
-                    this.toRotate[i].object.rotation.y=Math.PI;
+                    this.toRotate[i].rotation.y=Math.PI;
                     this.toRotate.splice(i, 1)
                 }
             }
@@ -55,10 +55,13 @@ document.querySelector('#testGame').addEventListener('click', () => {
         renderer.domElement.addEventListener('mousedown', (event) => {
             console.log("x:",mouse.x, "y:", mouse.y);
             const intersects = raycaster.intersectObjects( scene.children );
-            if(intersects[0]){
-                rotateAll.add(intersects[0]);
+            if(intersects.length > 0){
+                for(let i=0; i<intersects.length; i++){
+                    rotateAll.add(intersects[i].object);
+                }
+                
                 //rotateAll.add(intersects[1]);
-                intersects[ 0 ].object.material.color.set( 0xff0000 );
+                //intersects[ 0 ].object.material.color.set( 0xff0000 );
             }
         });;
         //helper functions
@@ -82,16 +85,15 @@ document.querySelector('#testGame').addEventListener('click', () => {
                 const plane1 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0x00838f, side: THREE.FrontSide} ) );
                 plane1.position.x = i;
                 plane1.position.y = j;
-                const plane2 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0xa86298, side: THREE.BackSide} ) );
+                const plane2 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0xa86298, side: THREE.DoubleSide} ) );
                 plane2.position.x = i;
                 plane2.position.y = j;
+                plane2.position.z = -.001;
                 scene.add( plane1 );
                 scene.add( plane2 );
             }
         }
-        function animate() {//function animating the scene
-            //if drawUpdate -> draw, setDrawUpdate false
-            
+        function animate() {//function animating the scene        
             requestAnimationFrame( animate );
             raycaster.setFromCamera(mouse, camera);
             rotateAll.rotate();
