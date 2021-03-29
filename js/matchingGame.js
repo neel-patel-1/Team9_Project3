@@ -1,4 +1,4 @@
-document.querySelector('#testGame').addEventListener('click', () => {
+document.querySelector('#matchingGame').addEventListener('click', () => {
     
     const matchMaker = {
         tiles: Array(Array()),
