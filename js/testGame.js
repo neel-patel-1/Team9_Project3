@@ -1,16 +1,31 @@
 document.querySelector('#testGame').addEventListener('click', () => {
     
-    
+    const matchMaker = {
+        tiles: Array(Array()),
+        flipped: Array(),
+        count: 0,
+        add: function(newTile){
+            this.flipped.push(newTile);
+            count++;
+            if(count === 2){
+                this.flipped = Array();
+                for(let i=0; i<this.flipped.length; i++){
+                    this.flipped[i].object.rotation.y=0;
+                }
+            }
+        },
+
+    }
 
     const rotateAll = {
         toRotate: Array(),
         rotate: function(){ 
             for(let i=0; i<this.toRotate.length; i++){
                 if(this.toRotate[i].object.rotation.y < (Math.PI-.1) ){
-                    this.toRotate[i].object.rotation.y+=.1;
-                    console.log(this);
+                    this.toRotate[i].object.rotation.y+=.03;
                 }
                 else{
+                    this.toRotate[i].object.rotation.y=Math.PI;
                     this.toRotate.splice(i, 1)
                 }
             }
@@ -42,7 +57,7 @@ document.querySelector('#testGame').addEventListener('click', () => {
             const intersects = raycaster.intersectObjects( scene.children );
             if(intersects[0]){
                 rotateAll.add(intersects[0]);
-                // intersects[ 0 ].object.rotation.y += .5;
+                //rotateAll.add(intersects[1]);
                 intersects[ 0 ].object.material.color.set( 0xff0000 );
             }
         });;
@@ -64,10 +79,14 @@ document.querySelector('#testGame').addEventListener('click', () => {
         {
             for(let j=-2.0; j<=2.0; j+=.5)
             {
-                const plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0x00838f + i*0xffffff*1/16, side: THREE.DoubleSide} ) );
-                plane.position.x = i;
-                plane.position.y = j;
-                scene.add( plane );
+                const plane1 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0x00838f, side: THREE.FrontSide} ) );
+                plane1.position.x = i;
+                plane1.position.y = j;
+                const plane2 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0xa86298, side: THREE.BackSide} ) );
+                plane2.position.x = i;
+                plane2.position.y = j;
+                scene.add( plane1 );
+                scene.add( plane2 );
             }
         }
         function animate() {//function animating the scene
