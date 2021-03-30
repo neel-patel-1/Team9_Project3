@@ -1,22 +1,45 @@
 document.querySelector('#matchingGame').addEventListener('click', () => {
-    
+    //
+    let scene, camera, renderer;
     const matchMaker = {
-        tiles: Array(Array()),
-        flipped: Array(),
-        count: 0,
-        add: function(newTile){
-            this.flipped.push(newTile);
-            count++;
-            if(count === 2){
-                this.flipped = Array();
-                for(let i=0; i<this.flipped.length; i++){
-                    this.flipped[i].object.rotation.y=0;
+        tiles: Array(),
+        count: 2,
+        checkPair: function(){
+            setTimeout( () => {
+                if(this.tiles[0].material.color.r === this.tiles[1].material.color.r
+                && this.tiles[0].material.color.g === this.tiles[1].material.color.g
+                && this.tiles[0].material.color.b === this.tiles[1].material.color.b){
+                    for(let i=0; i<this.count; i++){
+                        this.tiles[i].material.color = {r:.5, b:0, g:.1};
+                    }
+                    setTimeout( () =>{
+                        for(let i=0; i<this.count; i++){
+                            //this.tiles[0].geometry.dispose();
+                            //this.tiles[0].object.dispose();
+                            scene.remove(this.tiles[0]);
+                            this.tiles.shift();
+                        }
+                    }, 300)
+                    
                 }
+                else{
+                    for(let i=0; i<this.count; i++){
+                        rotateAll.toRotateBack.push(this.tiles[i]);
+                        this.tiles.shift();
+                    }
+                }
+                
+            }, 700)
+        },
+        add: function(newTile){
+            this.tiles.push(newTile);
+            if(this.tiles.length === 2){
+                this.checkPair();
             }
         },
 
     }
-
+    //
     const rotateAll = {
         toRotate: Array(),
         toRotateBack: Array(),
@@ -30,6 +53,9 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
                 }   
                 else{
                     this.toRotate[i].rotation.y=Math.PI;
+                    //
+                    matchMaker.add(this.toRotate[i]);
+                    //
                     this.toRotate.splice(i, 1);
                 }
             }
@@ -58,12 +84,12 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
     }
     function init(){
         document.querySelector('#game').textContent = ' ';
-        const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
         camera.position.set(0,0,5);
         camera.lookAt(0,0,0);
-        const scene =  new THREE.Scene();
+        scene =  new THREE.Scene();
 
-        const renderer = new THREE.WebGLRenderer();
+        renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight);
         document.getElementById("game").appendChild( renderer.domElement );
 
@@ -80,9 +106,6 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
                 for(let i=0; i<intersects.length; i++){
                     rotateAll.add(intersects[i].object);
                 }
-                
-                //rotateAll.add(intersects[1]);
-                //intersects[ 0 ].object.material.color.set( 0xff0000 );
             }
         });;
         //helper functions
@@ -106,12 +129,7 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
                 const plane1 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0x00838f, side: THREE.DoubleSide} ) );
                 plane1.position.x = i;
                 plane1.position.y = j;
-                // const plane2 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0xa86298, side: THREE.DoubleSide} ) );
-                // plane2.position.x = i;
-                // plane2.position.y = j;
-                // plane2.position.z = -.001;
                 scene.add( plane1 );
-                // scene.add( plane2 );
             }
         }
         function animate() {//function animating the scene        
