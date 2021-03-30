@@ -19,22 +19,40 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
 
     const rotateAll = {
         toRotate: Array(),
+        toRotateBack: Array(),
         rotate: function(){ 
             for(let i=0; i<this.toRotate.length; i++){
                 if(this.toRotate[i].rotation.y < (Math.PI-.1) ){
-                    this.toRotate[i].rotation.y+=.3;
+                    this.toRotate[i].rotation.y+=.05;
                     if(this.toRotate[i].rotation.y >= (Math.PI/2)){
                         this.toRotate[i].material.color = {r:.5, b:.5, g:0};
                     }
                 }   
                 else{
                     this.toRotate[i].rotation.y=Math.PI;
-                    this.toRotate.splice(i, 1)
+                    this.toRotate.splice(i, 1);
+                }
+            }
+            for(let i=0; i<this.toRotateBack.length; i++){
+                if(this.toRotateBack[i].rotation.y >= 0){
+                    this.toRotateBack[i].rotation.y-=.05;
+                    if(this.toRotateBack[i].rotation.y <= (Math.PI/2)){
+                        this.toRotateBack[i].material.color = {r:0,g:0.5137254901960784,b:0.5607843137254902};
+                    }
+                }   
+                else{
+                    this.toRotateBack[i].rotation.y=0;
+                    this.toRotateBack.splice(i, 1);
                 }
             }
         },
         add: function(newTile){
             this.toRotate.push(newTile);
+            while(this.toRotate.length > 2){
+                this.toRotateBack.push(this.toRotate[0]);
+                this.toRotate.shift();
+            }
+
         },
         
     }
