@@ -22,8 +22,11 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
         rotate: function(){ 
             for(let i=0; i<this.toRotate.length; i++){
                 if(this.toRotate[i].rotation.y < (Math.PI-.1) ){
-                    this.toRotate[i].rotation.y+=.03;
-                }
+                    this.toRotate[i].rotation.y+=.3;
+                    if(this.toRotate[i].rotation.y >= (Math.PI/2)){
+                        this.toRotate[i].material.color = {r:.5, b:.5, g:0};
+                    }
+                }   
                 else{
                     this.toRotate[i].rotation.y=Math.PI;
                     this.toRotate.splice(i, 1)
@@ -82,15 +85,15 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
         {
             for(let j=-2.0; j<=2.0; j+=.5)
             {
-                const plane1 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0x00838f, side: THREE.FrontSide} ) );
+                const plane1 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0x00838f, side: THREE.DoubleSide} ) );
                 plane1.position.x = i;
                 plane1.position.y = j;
-                const plane2 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0xa86298, side: THREE.DoubleSide} ) );
-                plane2.position.x = i;
-                plane2.position.y = j;
-                plane2.position.z = -.001;
+                // const plane2 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0xa86298, side: THREE.DoubleSide} ) );
+                // plane2.position.x = i;
+                // plane2.position.y = j;
+                // plane2.position.z = -.001;
                 scene.add( plane1 );
-                scene.add( plane2 );
+                // scene.add( plane2 );
             }
         }
         function animate() {//function animating the scene        
