@@ -2,20 +2,29 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
     //
     let scene, camera, renderer;
     const matchMaker = {
+        secretColors: Array(Array()),
         tiles: Array(),
         count: 2,
+        colorComp: {r:0,g:0,b:0},
+        // genColors: function(){
+        //     for(let i=0; i<10; i++){
+
+        //     }
+        // },
         checkPair: function(){
             setTimeout( () => {
-                if(this.tiles[0].material.color.r === this.tiles[1].material.color.r
-                && this.tiles[0].material.color.g === this.tiles[1].material.color.g
-                && this.tiles[0].material.color.b === this.tiles[1].material.color.b){
+                this.colorComp = this.tiles[0].material.color;
+                if(this.tiles.every((tile) => tile.material.color.r === this.colorComp.r 
+                                    && tile.material.color.g === this.colorComp.g 
+                                    && tile.material.color.b === this.colorComp.b))
+                {
                     for(let i=0; i<this.count; i++){
                         this.tiles[i].material.color = {r:.5, b:0, g:.1};
                     }
                     setTimeout( () =>{
                         for(let i=0; i<this.count; i++){
-                            //this.tiles[0].geometry.dispose();
-                            //this.tiles[0].object.dispose();
+                            // this.tiles[0].geometry.dispose();
+                            // this.tiles[0].object.dispose();
                             scene.remove(this.tiles[0]);
                             this.tiles.shift();
                         }
@@ -78,7 +87,7 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
             if(!(this.toRotate.map(x => x.uuid)).includes(newTile.uuid)){
                 this.toRotate.push(newTile);
             }
-            while(this.toRotate.length > 2){
+            while(this.toRotate.length > matchMaker.count){
                 this.toRotateBack.push(this.toRotate[0]);
                 this.toRotate.shift();
             }
