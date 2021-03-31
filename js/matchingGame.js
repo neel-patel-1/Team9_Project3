@@ -41,12 +41,17 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
             }, 700)
         },
         add: function(newTile){
-            if(!(this.tiles.map(x => x.uuid)).includes(newTile.uuid)){
+            if(!(this.tiles.map(tile => tile.uuid)).includes(newTile.uuid) && this.tiles.length < this.count){
                 this.tiles.push(newTile);
+                if(this.tiles.length === this.count){
+                    this.checkPair();
+                }
+                return true;
             }
-            if(this.tiles.length === 2){
-                this.checkPair();
+            else{
+                return false;
             }
+            
         },
 
     }
@@ -64,8 +69,10 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
                 }   
                 else{
                     this.toRotate[i].rotation.y=Math.PI;
-                    //
-                    matchMaker.add(this.toRotate[i]);
+                    if(!matchMaker.add(this.toRotate[i])){
+                        this.toRotateBack.push(this.toRotate[i]);
+                    }
+                    //matchMaker.add(this.toRotate[i]);
                     //
                     this.toRotate.splice(i, 1);
                 }
