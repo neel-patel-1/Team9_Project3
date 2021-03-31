@@ -32,7 +32,9 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
             }, 700)
         },
         add: function(newTile){
-            this.tiles.push(newTile);
+            if(!(this.tiles.map(x => x.uuid)).includes(newTile.uuid)){
+                this.tiles.push(newTile);
+            }
             if(this.tiles.length === 2){
                 this.checkPair();
             }
@@ -73,7 +75,9 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
             }
         },
         add: function(newTile){
-            this.toRotate.push(newTile);
+            if(!(this.toRotate.map(x => x.uuid)).includes(newTile.uuid)){
+                this.toRotate.push(newTile);
+            }
             while(this.toRotate.length > 2){
                 this.toRotateBack.push(this.toRotate[0]);
                 this.toRotate.shift();
