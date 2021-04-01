@@ -1,9 +1,11 @@
 document.querySelector('#matchingGame').addEventListener('click', () => {
-    
+    const numTiles = 4;//must be an even square
     let scene, camera, renderer;
     const matchMaker = {
         tiles: Array(),
         count: 2,
+        matches: 0,
+        hasWon: false,
         colorComp: {r:0,g:0,b:0},
         checkPair: function(){
             setTimeout( () => {
@@ -21,6 +23,10 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
                             // this.tiles[0].object.dispose();
                             scene.remove(this.tiles[0]);
                             this.tiles.shift();
+                        }
+                        this.matches++;
+                        if(this.matches*2 === numTiles){
+                            this.hasWon = true;
                         }
                     }, 300)
                     
@@ -55,12 +61,10 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
         rotate: function(){ 
             for(let i=0; i<this.toRotate.length; i++){
                 if(this.toRotate[i].rotation.y < (Math.PI-.1) ){
-                    this.toRotate[i].rotation.y+=.05;
+                    this.toRotate[i].rotation.y+=.2;
                     if(this.toRotate[i].rotation.y >= (Math.PI/2)){
-                        let newColor = colorMap.idColors.findIndex( tuple =>
-                            (tuple[0]=== this.toRotate[i].uuid || tuple[1]=== this.toRotate[i].uuid))/31* 0xffffff /** (colorMap.idColors.findIndex( (tuple) =>
-                        {return (tuple[0]=== this.toRotate[i].uuid || tuple[1]=== this.toRotate[i].uuid)}));/*+ (0x0000ff * colorMap.idColors.findIndex( (tuple) =>
-                            {return (tuple[0]=== this.toRotate[i].uuid || tuple[1]=== this.toRotate[i].uuid)}))*/;
+                        let newColor = (colorMap.idColors.findIndex( tuple =>
+                            (tuple[0]=== this.toRotate[i].uuid || tuple[1]=== this.toRotate[i].uuid))+1)/31* 0xffffff;
                         console.log(colorMap.idColors.findIndex( tuple =>
                         (tuple[0]=== this.toRotate[i].uuid || tuple[1]=== this.toRotate[i].uuid))*0x0000ff);
                         this.toRotate[i].material.color.set(newColor);
@@ -76,7 +80,7 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
             }
             for(let i=0; i<this.toRotateBack.length; i++){
                 if(this.toRotateBack[i].rotation.y >= 0){
-                    this.toRotateBack[i].rotation.y-=.05;
+                    this.toRotateBack[i].rotation.y-=.2;
                     if(this.toRotateBack[i].rotation.y < (Math.PI/2)){
                         this.toRotateBack[i].material.color.set(0x00838f);
                     }
@@ -100,27 +104,22 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
         
     }
     const colorMap = {
-        idColors: Array(64/matchMaker.count),
-        // initColors: function(){
-        //     for(let i=0; i<64/matchMaker.count; i++){
-        //         this.idColors[i]=Array(matchMaker.count);
-        //     }
-        // },
+        idColors: Array(numTiles/matchMaker.count),
         addTile: function(uuid){
             let added = false;
-            let initialPlace = parseInt(uuid.slice(-3),16)%(64/matchMaker.count);
+            let initialPlace = parseInt(uuid.slice(-3),16)%(numTiles/matchMaker.count);
             while(!added){
                 if(!this.idColors[initialPlace]){
                     this.idColors[initialPlace] = new Array();
                     this.idColors[initialPlace].push(uuid);
                     added = true;
                 }
-                else if(this.idColors[initialPlace].length < 2){
+                else if(this.idColors[initialPlace].length < matchMaker.count){
                     this.idColors[initialPlace].push(uuid);
                     added = true;
                 }
                 else{
-                    initialPlace = (initialPlace + 1)%(64/matchMaker.count);
+                    initialPlace = (initialPlace + 1)%(numTiles/matchMaker.count);
                 }
             }
         }
@@ -167,9 +166,9 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
 
         //generate tiles and color array
         //colorMap.initColors();
-        for(let i=-2.0; i<2.0; i+=.5)
+        for(let i=-Math.sqrt(numTiles)/4; i<Math.sqrt(numTiles)/4; i+=.5)
         {
-            for(let j=-2.0; j<2.0; j+=.5)
+            for(let j=-Math.sqrt(numTiles)/4; j<Math.sqrt(numTiles)/4; j+=.5)
             {
                 const plane1 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0x00838f, side: THREE.DoubleSide} ) );
                 plane1.position.x = i;
@@ -184,23 +183,38 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
             raycaster.setFromCamera(mouse, camera);
             rotateAll.rotate();
             renderer.render( scene, camera );
-            /*
-            if (hasWon)
+            
+            if (matchMaker.hasWon)
             {
-                for(let i=-2.5; i<=2.5; i+=.5)
-                {
-                    for(let j=-2.5; j<=2.5; j+=.5)
-                    {
+                //if hasn't been altered in the past 330 millis
+                winScreen.tryShow()
+                //call winScreen
+                
+            }
+            
+        }
+        let winScreen = {
+            canSplat: true,
+            splatScreen: function winScreen(){
+                for(let i=-Math.sqrt(numTiles)/4; i<Math.sqrt(numTiles)/4; i+=.5){
+                    for(let j=-Math.sqrt(numTiles)/4; j<Math.sqrt(numTiles)/4; j+=.5){
                         const plane = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: Math.random() * 0xffffff, side: THREE.FrontSide} ) );
                         plane.position.x = i;
                         plane.position.y = j;
                         scene.add( plane );
                     }
                 }
-            }
-            */
+                setTimeout(() => {this.canSplat = true}, 330);
+            },
+            tryShow: function(){
+                if(this.canSplat == true){
+                    this.canSplat = false;
+                    this.splatScreen();
+                }
+            },
         }
         animate();
+        
     }
 
     init();
