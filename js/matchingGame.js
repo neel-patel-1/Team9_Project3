@@ -1,16 +1,10 @@
 document.querySelector('#matchingGame').addEventListener('click', () => {
-    //
+    
     let scene, camera, renderer;
     const matchMaker = {
-        secretColors: Array(Array()),
         tiles: Array(),
         count: 2,
         colorComp: {r:0,g:0,b:0},
-        // genColors: function(){
-        //     for(let i=0; i<10; i++){
-
-        //     }
-        // },
         checkPair: function(){
             setTimeout( () => {
                 this.colorComp = this.tiles[0].material.color;
@@ -33,7 +27,7 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
                 }
                 else{
                     for(let i=0; i<this.count; i++){
-                        rotateAll.toRotateBack.push(this.tiles[i]);
+                        rotateAll.toRotateBack.push(this.tiles[0]);
                         this.tiles.shift();
                     }
                 }
@@ -55,7 +49,6 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
         },
 
     }
-    //
     const rotateAll = {
         toRotate: Array(),
         toRotateBack: Array(),
@@ -64,7 +57,13 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
                 if(this.toRotate[i].rotation.y < (Math.PI-.1) ){
                     this.toRotate[i].rotation.y+=.05;
                     if(this.toRotate[i].rotation.y >= (Math.PI/2)){
-                        this.toRotate[i].material.color = {r:.5, b:.5, g:0};
+                        let newColor = colorMap.idColors.findIndex( tuple =>
+                            (tuple[0]=== this.toRotate[i].uuid || tuple[1]=== this.toRotate[i].uuid))/31* 0xffffff /** (colorMap.idColors.findIndex( (tuple) =>
+                        {return (tuple[0]=== this.toRotate[i].uuid || tuple[1]=== this.toRotate[i].uuid)}));/*+ (0x0000ff * colorMap.idColors.findIndex( (tuple) =>
+                            {return (tuple[0]=== this.toRotate[i].uuid || tuple[1]=== this.toRotate[i].uuid)}))*/;
+                        console.log(colorMap.idColors.findIndex( tuple =>
+                        (tuple[0]=== this.toRotate[i].uuid || tuple[1]=== this.toRotate[i].uuid))*0x0000ff);
+                        this.toRotate[i].material.color.set(newColor);
                     }
                 }   
                 else{
@@ -72,16 +71,14 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
                     if(!matchMaker.add(this.toRotate[i])){
                         this.toRotateBack.push(this.toRotate[i]);
                     }
-                    //matchMaker.add(this.toRotate[i]);
-                    //
                     this.toRotate.splice(i, 1);
                 }
             }
             for(let i=0; i<this.toRotateBack.length; i++){
                 if(this.toRotateBack[i].rotation.y >= 0){
                     this.toRotateBack[i].rotation.y-=.05;
-                    if(this.toRotateBack[i].rotation.y <= (Math.PI/2)){
-                        this.toRotateBack[i].material.color = {r:0,g:0.5137254901960784,b:0.5607843137254902};
+                    if(this.toRotateBack[i].rotation.y < (Math.PI/2)){
+                        this.toRotateBack[i].material.color.set(0x00838f);
                     }
                 }   
                 else{
@@ -101,6 +98,32 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
 
         },
         
+    }
+    const colorMap = {
+        idColors: Array(64/matchMaker.count),
+        // initColors: function(){
+        //     for(let i=0; i<64/matchMaker.count; i++){
+        //         this.idColors[i]=Array(matchMaker.count);
+        //     }
+        // },
+        addTile: function(uuid){
+            let added = false;
+            let initialPlace = parseInt(uuid.slice(-3),16)%(64/matchMaker.count);
+            while(!added){
+                if(!this.idColors[initialPlace]){
+                    this.idColors[initialPlace] = new Array();
+                    this.idColors[initialPlace].push(uuid);
+                    added = true;
+                }
+                else if(this.idColors[initialPlace].length < 2){
+                    this.idColors[initialPlace].push(uuid);
+                    added = true;
+                }
+                else{
+                    initialPlace = (initialPlace + 1)%(64/matchMaker.count);
+                }
+            }
+        }
     }
     function init(){
         document.querySelector('#game').textContent = ' ';
@@ -142,14 +165,18 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
             renderer.setSize( window.innerWidth, window.innerHeight );
         }
 
-        for(let i=-2.0; i<=2.0; i+=.5)
+        //generate tiles and color array
+        //colorMap.initColors();
+        for(let i=-2.0; i<2.0; i+=.5)
         {
-            for(let j=-2.0; j<=2.0; j+=.5)
+            for(let j=-2.0; j<2.0; j+=.5)
             {
                 const plane1 = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( {color: 0x00838f, side: THREE.DoubleSide} ) );
                 plane1.position.x = i;
                 plane1.position.y = j;
                 scene.add( plane1 );
+                colorMap.addTile(plane1.uuid);
+                
             }
         }
         function animate() {//function animating the scene        
