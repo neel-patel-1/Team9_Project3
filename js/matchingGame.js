@@ -1,5 +1,5 @@
 document.querySelector('#matchingGame').addEventListener('click', () => {
-    const numTiles = 4;//must be an even square
+    const numTiles = 16;//must be an even square
     let scene, camera, renderer;
     const matchMaker = {
         tiles: Array(),
@@ -92,7 +92,9 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
             }
         },
         add: function(newTile){
-            if(!(this.toRotate.map(x => x.uuid)).includes(newTile.uuid)){
+            if(!(this.toRotate.map(x => x.uuid)).includes(newTile.uuid)
+            &&!(this.toRotateBack.map(x => x.uuid)).includes(newTile.uuid)
+            &&!(matchMaker.tiles.map(x => x.uuid)).includes(newTile.uuid)){
                 this.toRotate.push(newTile);
             }
             while(this.toRotate.length > matchMaker.count){
