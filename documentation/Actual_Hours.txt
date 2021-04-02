@@ -1,0 +1,12 @@
+
+Neel:
+3/22: Creating torus with canvas overlay texture - 2 hrs
+3/23: added orbit control -1 hrs
+3/24: Add X's and O's ~1.5 hrs
+3/25: 1.5 hrs Draw lines to show victor
+3/26: 2 hrsLanding Page
+3/28: 2 hrs Implemented tiles with clickable rotation
+3/29: 1 hrs Implemented game logic for tiles
+3/30: 2 hrs Color Matching for tiles, keeping track of flipped
+3/31: 1 hrs fixing color matching
+4/1:  1 hrs Win screen
