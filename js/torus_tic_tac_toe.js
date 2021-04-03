@@ -20,6 +20,16 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
     gameSkin.height = 200;
     let context = gameSkin.getContext('2d');
     var texture = new THREE.CanvasTexture(gameSkin);
+    //
+    let background = document.createElement('canvas');
+    background.width = window.innerWidth;
+    background.height = window.innerHeight;
+    backgroundContext = background.getContext('2d');
+    backgroundContext.fillRect(0, 0, background.width, background.height);
+    
+    var backgroundTexture = new THREE.CanvasTexture(background);
+    scene.background = backgroundTexture;
+    //
 
     const controls = new THREE.OrbitControls( camera, renderer.domElement );
     controls.minDistance = 5;
@@ -64,6 +74,7 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
                     game.winner = game.next;
                     //drawLines();
                     texture.needsUpdate = true;
+                    backgroundTexture.needsUpdate = true;
                 }
                 else{
                     game.newMove = true;
@@ -153,7 +164,7 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
         var rect = renderer.domElement.getBoundingClientRect();
         mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
         mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
-        console.log(mouse.x,mouse.y);
+        //console.log(mouse.x,mouse.y);//debugging
     }
 
     function onWindowResize(){
@@ -167,6 +178,7 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
             drawLines();
             game.newMove = false;
             texture.needsUpdate = true;
+            backgroundTexture.needsUpdate = true;
         }
         requestAnimationFrame( animate );
         renderer.render( scene, camera );
@@ -245,8 +257,8 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
                     break;
             }
         }
-        document.querySelector('#game').appendChild(gameSkin);
-        return texture;
+        backgroundContext.drawImage(gameSkin,0,0);
+        return texture;//for texture mapping purposes
     }
     function mod(n, m) {
         return ((n % m) + m) % m;
