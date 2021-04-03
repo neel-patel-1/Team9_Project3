@@ -1,4 +1,12 @@
 document.querySelector('#matchingGame').addEventListener('click', () => {
+    //clear child elements of game div
+    document.querySelector('#game').textContent = ' ';
+    document.querySelector('#instructions').textContent = ' ';
+    //append instructions
+    let instr = document.createElement('p');
+    instr.textContent = 'Flip Tiles to find matching Pairs!';
+    document.querySelector('#instructions').appendChild(instr);
+    
     const numTiles = 16;//must be an even square
     let scene, camera, renderer;
     const matchMaker = {

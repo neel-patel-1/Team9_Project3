@@ -2,6 +2,11 @@
 document.querySelector('#torusTicTacToe').addEventListener('click', () => {
     //clear child elements of game div
     document.querySelector('#game').textContent = ' ';
+    document.querySelector('#instructions').textContent = ' ';
+    //append instructions
+    let instr = document.createElement('p');
+    instr.textContent = 'Double Click the Torus (Donut) to Place X or O. Click and Drag to change view. Alternate with a Friend!';
+    document.querySelector('#instructions').appendChild(instr);
     //initialize camera, scene, renderer, add Orbital Controls
     const R = 5
     const r = 2.5;
