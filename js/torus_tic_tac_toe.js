@@ -100,7 +100,10 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
     scene.add( torus );
 
     animate();//start animation
-
+    /**
+     * Function called after each turn to check if the current player has won
+     * @returns {boolean} whether the player has won
+     */
     function checkWin()
     {
         
@@ -126,6 +129,11 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
         }
         
     }
+    /**
+     * Function called after each turn to check if the current player has won
+     * @param {object} intersect the object representing the 3d location of the intersection point
+     * @returns {boolean} whether the symbol was drawn on the board
+     */
     function setBoardPos(intersect)
     {
         x = intersect.point.x;
@@ -164,19 +172,29 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
             return false;
         }
     }
-
+    /**
+     * callback function sets mouse object's x position and y position (helps with window scrolling)
+     * @param {object} event represents information about the window to be used for calculating mouse position
+     */
     function onMouseMove( event ) {//helper function, gets mouse x and y coordinates
         var rect = renderer.domElement.getBoundingClientRect();
         mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
         mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
         //console.log(mouse.x,mouse.y);//debugging
     }
-
+    /**
+     * callback function adjusts renderer and camera for window resizing
+     */
     function onWindowResize(){
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize( window.innerWidth, window.innerHeight );
     }
+    /**
+     * main loop calling the renderer and displaying the scene
+     * redraws the game board after each move and instantiates the 
+     * raycaster checking for a hit on each double click
+     */
     function animate() {//function animating the scene
         //if drawUpdate -> draw, setDrawUpdate false
         if(game.newMove){
@@ -190,7 +208,11 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
         raycaster.setFromCamera(mouse, camera);//rays shot from camera
         
     }
-
+    /**
+     * function draws symbols onto the canvas
+     * @param {string} winner optional argument for use if a player wins
+     * @param {string} dir gives information about the direction of the winning symbols
+     */
     function drawLines(winner, dir){//function for drawing on torus
         
         
@@ -265,6 +287,11 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
         backgroundContext.drawImage(gameSkin,0,0);
         return texture;//for texture mapping purposes
     }
+    /**
+     * function returning the remainder of the division algorithm (works with negative numbers)
+     * @param {number} n operand
+     * @param {number} m divisor
+     */
     function mod(n, m) {
         return ((n % m) + m) % m;
     }
