@@ -10,7 +10,7 @@ document.querySelector('#ball').addEventListener('click', () => {
     //initialize camera, scene, renderer, add Orbital Controls
   
     const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.set(0,0,5);
+    camera.position.set(4,0,0);
     camera.lookAt(0,0,0);
 
     const scene =  new THREE.Scene();
@@ -32,8 +32,14 @@ document.querySelector('#ball').addEventListener('click', () => {
 	ctx.fillRect(0,0,100,100);
 
 	//ball location
-	let ballX = 0;
-	let ballY = 0;
+	let ballX = 20;
+	let ballY = 80;
+	let v = 2; //velocity
+	let sign = 1;
+	let amplitude = 50;
+	let offset = 0;
+
+	let playerX = (gcanvas.width/2);//player position
 	
 	var canvasTex = new THREE.CanvasTexture(gcanvas);
 
@@ -52,19 +58,60 @@ document.querySelector('#ball').addEventListener('click', () => {
 		canvasTex.needsUpdate = true;
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);
-		ctx.fillStyle='white';
-		ctx.fillRect(0,0,300,300);
-		ctx.fillStyle = 'red';
-		ctx.fillRect(ballX, ballY, ballX+5, ballY+5);
-		ballX -= 5; ballY -= 5;
-		ballX = (ballX%gcanvas.width+gcanvas.width)%gcanvas.width;
-		ballY = (ballY%gcanvas.height+gcanvas.height)%gcanvas.height;
-		//material.map = canvasTex;
-		//.rotation.y += 0.01;
+		draw();
 
 		
 	}
-	animate();
 
+
+	function draw(){
+		let h = gcanvas.height;
+		let w = gcanvas.width;
+
+		ctx.fillStyle='gray';
+		ctx.fillRect(0,0,300,300);
+
+		ctx.fillStyle='white';
+		
+		let x = 0;
+		let y = 0;
+		let grid = 30;
+		for(y = 0; y < grid; y ++){
+			for(x = 0; x < grid; x ++){
+			ctx.fillRect(x*(w/grid),y*(h/grid),(w/grid)*0.9,(h/grid)*0.9);
+			}
+		}
+		
+		ctx.fillStyle = 'blue';
+		ctx.fillRect(ballX, ballY, 10, 10);
+		
+		ctx.fillRect(playerX-20, h/2, 40, 10);
+
+		
+			
+		ballX += v; 
+
+		if(Math.abs(ballX-playerX)<20 && Math.abs(ballY-(h/2))<10){
+			sign *= -1;
+			amplitude = Math.random()*30+40;
+			offset -= (w/4);
+		}
+		
+		//set y coordinate
+		ballY = sign*amplitude*Math.sin(ballX*(6.48/w)+offset)+(h/2);
+
+		
+		ballX = (ballX%w+w)%w;
+	}
+	animate();
+	
+	window.addEventListener('keydown', function(event) {
+		event.preventDefault();
+  		if (event.code == 'KeyK') {
+  			playerX -= 10;
+  		}else if(event.code == 'KeyL'){
+			playerX += 10;
+		}
+	});
 });
 
