@@ -34,18 +34,21 @@ document.querySelector('#ball').addEventListener('click', () => {
 	//ball location
 	let ballX = 20;
 	let ballY = 80;
-	let v = 2; //velocity
+	let v = 1; //velocity
 	let sign = 1;
 	let amplitude = 50;
 	let offset = 0;
+	let speedY = 0;
+	let prevY = 0;
+	let c = 5;//slope of trajectory
 
 	let playerX = (gcanvas.width/2);//player position
 	
 	var canvasTex = new THREE.CanvasTexture(gcanvas);
 
 
-	//draw a box
-	const geometry = new THREE.SphereGeometry(1,16,12);
+	//draw a ball
+	const geometry = new THREE.SphereGeometry(1,32,24);
 	const material = new THREE.MeshBasicMaterial({map: canvasTex});
 	const ball = new THREE.Mesh(geometry, material);
 	
@@ -87,30 +90,37 @@ document.querySelector('#ball').addEventListener('click', () => {
 		
 		ctx.fillRect(playerX-20, h/2, 40, 10);
 
-		
+		let theta = ballX*(2*3.1415/w) + offset;
+		//derivative of great circle path
 			
-		ballX += v; 
-
-		if(Math.abs(ballX-playerX)<20 && Math.abs(ballY-(h/2))<10){
-			sign *= -1;
-			amplitude = Math.random()*30+40;
-			offset -= (w/4);
-		}
 		
-		//set y coordinate
-		ballY = sign*amplitude*Math.sin(ballX*(6.48/w)+offset)+(h/2);
-
 		
+		ballY = (Math.atan(1/(c*Math.sin(theta))));
+		ballY = ((ballY%Math.PI)+Math.PI)%Math.PI;
+		ballY *= (h/3.1415);
+		//console.log(dY);
+		
+		let dtoE = Math.abs(ballY-(h/2))/(h/2)+2;
+		
+		
+
+		ballX += v;
 		ballX = (ballX%w+w)%w;
+
+		if(Math.abs(ballX-playerX) < 20 && Math.abs(ballY-(h/2))<10){
+			c = Math.random()*4+0.25;//2/(Math.abs(ballX-playerX) + 0.1);
+			offset += (Math.PI)+(0.4/c);
+			//offset += (0.04/c);	
+		}
 	}
 	animate();
 	
 	window.addEventListener('keydown', function(event) {
 		event.preventDefault();
   		if (event.code == 'KeyK') {
-  			playerX -= 10;
+  			playerX -= 5;
   		}else if(event.code == 'KeyL'){
-			playerX += 10;
+			playerX += 5;
 		}
 	});
 });
