@@ -5,7 +5,7 @@ document.querySelector('#ball').addEventListener('click', () => {
 
     document.querySelector('#game').textContent = ' ';
     let instr = document.createElement('p');
-    instr.textContent = 'ball';
+    instr.textContent = 'Use K and L keys to move platform';
     document.querySelector('#instructions').appendChild(instr);
     //initialize camera, scene, renderer, add Orbital Controls
   
