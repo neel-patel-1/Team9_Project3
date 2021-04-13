@@ -1,3 +1,4 @@
+//possible spin on snake??
 document.querySelector('#hordeGame').addEventListener('click', () => {
     //clear child elements of game div
     document.querySelector('#game').textContent = ' ';
