@@ -18,7 +18,7 @@ document.querySelector('#swarm').addEventListener('click', () => {
     //each speck will be drawn towards "swarm center"
     //tokens within swarm center radius add to swarm
     //radius of effects inc w num specks
-    
+    //https://stackoverflow.com/questions/64577428/how-i-can-do-a-smooth-movement-of-player-in-canvas-game
     function Swarm(){
         this.rangePerSpeck = 5;
         this.speckArr = Array(Array(2));
