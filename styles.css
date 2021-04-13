@@ -1,5 +1,10 @@
-body{
-    background-color: #e0df79;
+body, html{
+    /*background: linear-gradient(#e0df79, #9198e5);*/
+    background: linear-gradient(to bottom, blue, pink ) no-repeat;
+    background-size:cover;
+    height: 100%;
+    /*background:radial-gradient(ellipse 50% 50px,
+      red, yellow 10%, #1e90ff 50%, beige);*/
 }
 
 .widget-menu {
@@ -11,9 +16,9 @@ body{
 
 
 .widget-menu button {
-    background-color: black; /* Grey background color */
-    color: white; /* Black text color */
-    display: inline-block; /* Make the links appear below each other */
+    background: linear-gradient(#e0df79, #9198e5); /* Grey background color */
+    color: white; 
+    display: inline-block; 
     padding: 50px; /* Add some padding */
     text-decoration: none; /* Remove underline from links */
 }

@@ -18,16 +18,19 @@ document.querySelector('#swarm').addEventListener('click', () => {
     //each speck will be drawn towards "swarm center"
     //tokens within swarm center radius add to swarm
     //radius of effects inc w num specks
-    let moveSpeed = ((canvas.width+canvas.height)/2)/5;
+    
     function Swarm(){
-        this.rangePerSpeck = 1;
-        this.speckArr = Array();
+        this.rangePerSpeck = 5;
+        this.speckArr = Array(Array(2));
         this.center = [canvas.width/2,canvas.height/2];
-        this.numSpecks = 0;
+        this.numSpecks = 1;
         this.radius = this.numSpecks*this.rangePerSpeck;
+        this.moveSpeed = this.radius;
 
         //test func for drawing circle
         this.showPlayer = () => {
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
             ctx.beginPath();
             ctx.arc(this.center[0], this.center[1], this.radius, 0, 2*Math.PI);
             ctx.fillStyle = '#ff0000';
@@ -36,17 +39,18 @@ document.querySelector('#swarm').addEventListener('click', () => {
         }
         this.move = (dir) =>{
             if(dir === 'w'){
-                this.center[1]-=(moveSpeed);
+                this.center[1]-=(this.moveSpeed);
             }
             else if(dir === 'a'){
-                this.center[0]-=(moveSpeed);
+                this.center[0]-=(this.moveSpeed);
             }
             else if(dir === 's'){
-                this.center[1]+=moveSpeed;
+                this.center[1]+=this.moveSpeed;
             }
             else if(dir === 'd'){
-                this.center[0]+=moveSpeed;
+                this.center[0]+=this.moveSpeed;
             }
+            this.showPlayer();
 
         }
         this.drawSpecks = function(){
@@ -57,17 +61,6 @@ document.querySelector('#swarm').addEventListener('click', () => {
         this.addSpeck = function(num){
             this.numSpecks+=num;
             this.speckArr.push(new Speck(center[0] + Math.random()*this.radius, center[1] + Math.random()*this.radius));
-        }
-    }
-    function Speck(x, y){
-        this.x = x;
-        this.y = y;
-        this.chase = function(toChase, chaseSpeed){//array w xpos @ toChase[0] ypos @ toChase[1]
-            //dynamically change speck positions
-        }
-        this.show = function(){
-            ctx.arc(center[0], center[1], radius, 0, 2*Math.PI);
-            ctx.fill();
         }
     }
     
@@ -85,5 +78,9 @@ document.querySelector('#swarm').addEventListener('click', () => {
         ctx.fillRect(0,0,canvas.width, canvas.height);
     }
     playerSwarm.showPlayer();
+    // ctx.fillStyle = '#ff0000';
+    // ctx.beginPath();
+    // ctx.arc(canvas.width/2, canvas.height/2, 5, 0, 2*Math.PI);
+    // ctx.fill();
 })
 
