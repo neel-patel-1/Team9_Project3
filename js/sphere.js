@@ -39,8 +39,8 @@ document.querySelector('#ball').addEventListener('click', () => {
 	let amplitude = 50;
 	let offset = 0;
 	let speedY = 0;
-	let prevY = 0;
-	let c = 5;//slope of trajectory
+	let c = 20;//slope of trajectory
+	let dtheta = 0.1;
 
 	let playerX = (gcanvas.width/2);//player position
 	
@@ -56,16 +56,52 @@ document.querySelector('#ball').addEventListener('click', () => {
 	 controls.minDistance = 5;
 
 	scene.add(ball);
-	
 	function animate() {
+		//moveCamera();
 		canvasTex.needsUpdate = true;
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);
+		calcPos();
+		collision();
 		draw();
 
 		
 	}
 
+	function moveCamera(){
+		let p = 5;//radius of sphere
+
+		let u = ballX*(6.28/gcanvas.width);
+		let v = ballY*(3.14/gcanvas.height);
+		let nx = -p*Math.cos(u)*Math.sin(v);
+		let ny = p*Math.cos(v);
+		let nz = p*Math.sin(u)*Math.sin(v);
+		camera.position.set(nx, ny, nz);
+		camera.lookAt(0,0,0);
+	}
+	
+	function collision(){
+		let h = gcanvas.height;
+		let w = gcanvas.width;
+		if(Math.abs(ballX-playerX) < 20 && Math.abs(ballY-(h/2))<10){
+			let dfC = Math.abs(ballX-playerX)/20;//distance from center of paddle	
+			switch(Math.floor(dfC*3)) {
+  				case 0:
+					c = 10;
+					offset += (Math.PI)+(0.1);
+					break;
+				case 1:
+					c = 2;
+					offset += (Math.PI)+(0.1);
+					break;
+				case 2:
+					c = 0.3;
+					offset += (Math.PI)+(0.7);
+					break;
+  				default:
+			} 		
+		}
+	}
 
 	function draw(){
 		let h = gcanvas.height;
@@ -84,37 +120,50 @@ document.querySelector('#ball').addEventListener('click', () => {
 			ctx.fillRect(x*(w/grid),y*(h/grid),(w/grid)*0.9,(h/grid)*0.9);
 			}
 		}
-		
+
+		let phi = Math.PI*ballY/h;
+		let ball_h = 5;
+		dtheta = ball_h/(2*Math.PI);//change in theta that gives the width
+		let ball_w = ball_h/calcWidth(phi, dtheta);
 		ctx.fillStyle = 'blue';
-		ctx.fillRect(ballX, ballY, 10, 10);
+		ctx.fillRect(ballX-ball_w, ballY-ball_h, ball_w*2, ball_h*2);
 		
 		ctx.fillRect(playerX-20, h/2, 40, 10);
 
-		let theta = ballX*(2*3.1415/w) + offset;
-		//derivative of great circle path
-			
+
+	}
+	//approximate horizontal arc length given phi and dtheta
+	function calcWidth(phi, dtheta){
+		let width = Math.sin(dtheta)*Math.sin(phi);
+		width = width/(Math.sin((2*Math.PI-dtheta)/2));
+		return width
+	}
+	function calcPos(){
+		let h = gcanvas.height;
+		let w = gcanvas.width;
+		let theta = ballX*(2*3.1415/w) + offset;	
+		let phi = Math.PI*ballY/h;
 		
 		
+
 		ballY = (Math.atan(1/(c*Math.sin(theta))));
 		ballY = ((ballY%Math.PI)+Math.PI)%Math.PI;
 		ballY *= (h/3.1415);
-		//console.log(dY);
 		
-		let dtoE = Math.abs(ballY-(h/2))/(h/2)+2;
-		
-		
+		let mag = Math.cos(theta)*c/(c*c*Math.sin(theta)*Math.sin(theta)+1);
+		mag = 1 + (mag*mag);
+		mag = Math.sqrt(mag);
 
-		ballX += v;
+
+		ballX += v/(mag*calcWidth(phi, dtheta));
+	
 		ballX = (ballX%w+w)%w;
-
-		if(Math.abs(ballX-playerX) < 20 && Math.abs(ballY-(h/2))<10){
-			c = Math.random()*4+0.25;//2/(Math.abs(ballX-playerX) + 0.1);
-			offset += (Math.PI)+(0.4/c);
-			//offset += (0.04/c);	
-		}
+		
 	}
 	animate();
 	
+		
+
 	window.addEventListener('keydown', function(event) {
 		event.preventDefault();
   		if (event.code == 'KeyK') {
