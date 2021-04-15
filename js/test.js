@@ -22,18 +22,18 @@ document.querySelector('#hordeGame').addEventListener('click', () => {
         y : canvas.width/2,
         moveV : function(dir){
             if(dir === 0){
-                this.y-=(this.l/2);
+                this.y-=(this.l);
             }
             else{
-                this.y+=(this.l/2);
+                this.y+=(this.l);
             }
         },
         moveH : function(dir){
             if(dir === 0){
-                this.x-=(this.w/2);
+                this.x-=(this.w);
             }
             else{
-                this.x+=(this.w/2);
+                this.x+=(this.w);
             }
         },
         draw: function(){
