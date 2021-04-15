@@ -1,10 +1,41 @@
+/*makes menu flush with sides*/
+*{
+    padding:0px;
+    margin: 0;
+}
 body, html{
     /*background: linear-gradient(#e0df79, #9198e5);*/
-    background: linear-gradient(to bottom, blue, pink ) no-repeat;
+    background: linear-gradient(360deg, rgb(50, 50, 54), rgb(117, 110, 111) ) no-repeat;
     background-size:cover;
     height: 100%;
+    box-sizing:border-box;
+    font-family:sans-serif;
     /*background:radial-gradient(ellipse 50% 50px,
       red, yellow 10%, #1e90ff 50%, beige);*/
+}
+
+
+.menu-bar{
+    background: #f1ef55;
+    text-align:center;
+}
+.menu-bar ul{
+    display:inline-flex;
+    list-style: none;
+    color: #FFFFFF;
+}
+.menu-bar ul li{
+    padding: 20px;
+    margin: 15px;
+    width: 120px;
+}
+.menu-bar ul li a{
+    text-decoration:none;
+    color: #FFFFFF;
+}
+.menu-bar ul li:hover{
+    background:#bbb93b;
+    border-radius: 10px;
 }
 
 .widget-menu {
