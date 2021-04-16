@@ -14,7 +14,7 @@ body, html{
       red, yellow 10%, #1e90ff 50%, beige);*/
 }
 
-
+/*bar-menu*/
 .menu-bar{
     background: #f1ef55;
     text-align:center;
@@ -37,6 +37,23 @@ body, html{
     background:#bbb93b;
     border-radius: 10px;
 }
+
+/*drop-down menu*/
+.sub-menu{
+    display: none;
+}
+.menu-bar ul li:hover .sub-menu{
+    display: block;
+    position: absolute;
+    background: #f1ef55;
+    margin-top: 15px;
+    margin-left: -15px;
+}
+.menu-bar ul li:hover .sub-menu ul{
+    display: block;
+    margin: 10px;
+}
+
 
 .widget-menu {
     height: 200px;
@@ -62,3 +79,6 @@ canvas {
     display: block;
     margin: 0 auto;
 }
+
+
+
