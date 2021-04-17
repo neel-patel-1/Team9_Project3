@@ -1,5 +1,5 @@
 //add event listener for ball button
-document.querySelector('#ball').addEventListener('click', () => {
+const ballInit = () => {
     //clear child elements of game div
 	
 
@@ -125,5 +125,5 @@ document.querySelector('#ball').addEventListener('click', () => {
 			playerX += 5;
 		}
 	});
-});
+}
 

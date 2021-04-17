@@ -1,5 +1,5 @@
 //add event listener for torustictactoe button
-document.querySelector('#torusTicTacToe').addEventListener('click', () => {
+const tictactoeinit = () => {
     //clear child elements of game div
     document.querySelector('#game').textContent = ' ';
     document.querySelector('#instructions').textContent = ' ';
@@ -296,4 +296,3 @@ document.querySelector('#torusTicTacToe').addEventListener('click', () => {
         return ((n % m) + m) % m;
     }
 }
-)

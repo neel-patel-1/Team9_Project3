@@ -1,4 +1,4 @@
-document.querySelector('#swarm').addEventListener('click', () => {
+const swarmInit = () => {
     //clear child elements of game div
     document.querySelector('#game').textContent = ' ';
     document.querySelector('#instructions').textContent = ' ';
@@ -82,5 +82,5 @@ document.querySelector('#swarm').addEventListener('click', () => {
     // ctx.beginPath();
     // ctx.arc(canvas.width/2, canvas.height/2, 5, 0, 2*Math.PI);
     // ctx.fill();
-})
+}
 

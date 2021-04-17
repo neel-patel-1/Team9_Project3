@@ -1,4 +1,4 @@
-document.querySelector('#matchingGame').addEventListener('click', () => {
+const matchingInit = () => {
     //clear child elements of game div
     document.querySelector('#game').textContent = ' ';
     document.querySelector('#instructions').textContent = ' ';
@@ -233,4 +233,4 @@ document.querySelector('#matchingGame').addEventListener('click', () => {
 
     
 
-})
+}

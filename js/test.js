@@ -1,5 +1,5 @@
 //possible spin on snake??
-document.querySelector('#hordeGame').addEventListener('click', () => {
+const snakeInit = () => {
     //clear child elements of game div
     document.querySelector('#game').textContent = ' ';
     document.querySelector('#instructions').textContent = ' ';
@@ -67,5 +67,5 @@ document.querySelector('#hordeGame').addEventListener('click', () => {
         ctx.fillRect(0,0,canvas.width, canvas.height);
     }
     rect.draw();
-})
+}
 

@@ -16,7 +16,7 @@ body, html{
 
 /*bar-menu*/
 .menu-bar{
-    background: #f1ef55;
+    background: #f1b355;
     text-align:center;
 }
 .menu-bar ul{
@@ -34,7 +34,7 @@ body, html{
     color: #FFFFFF;
 }
 .menu-bar ul li:hover{
-    background:#bbb93b;
+    background:#9e7538;
     border-radius: 10px;
 }
 
@@ -45,7 +45,7 @@ body, html{
 .menu-bar ul li:hover .sub-menu{
     display: block;
     position: absolute;
-    background: #f1ef55;
+    background: #f1b355;
     margin-top: 15px;
     margin-left: -15px;
 }

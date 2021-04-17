@@ -18,25 +18,29 @@
         <li><a href='#' id="select_3d"><i class="fa fa-arrows-alt" aria-hidden="true"></i> 3D Games</a>
           <div class="sub-menu">
             <ul>
-              <li><a href="#">Torus Tic Tac Toe</a></li>
-              <li><a href="#">Tile Matching</a></li>
+              <li><a href="#" id="torusTicTacToe">Torus Tic Tac Toe</a></li>
+              <li><a href="#" id="matchingGame">Tile Matching</a></li>
+              <li><a href="#" id="ball">Ball</a></li>
             </ul>
           </div>
         </li>
-        <li><a href='#' id="select_2d"><i class="fa fa-arrows" aria-hidden="true"></i> 2D Games</a></li>
+        <li><a href='#' id="select_2d"><i class="fa fa-arrows" aria-hidden="true"></i> 2D Games</a>
+          <div class="sub-menu">
+            <ul>
+              <li><a href="#" id="snake">Snake</a></li>
+              <li><a href="#" id="swarm">Swarm Physics</a></li>
+            </ul>
+          </div>
+        </li>
         <li><a href='#' id="art"><i class="fa fa-picture-o" aria-hidden="true"></i> Art/Models</a></li>
       </ul>
     </div>
 
     <div id="gamediv" hidden>
-      <div class="widget-menu" id="games_3d">
+      <div class="widget-menu">
         <!-- <button id="torusTicTacToe">TorusTicTacToe</button>
         <button id="matchingGame">Matching Game</button>
         <button id="ball">Ball</button> -->
-      </div>
-      <div class="widget-menu" id="games_2d">
-        <!-- <button id="hordeGame">Test</button>
-        <button id="swarm">Swarm</button> -->
       </div>
       <!--instructions appended to this div-->
       <div id="instructions"></div>
@@ -51,11 +55,17 @@
 
     <script src='js/three.js'></script>
     <script src='js/OrbitControls.js'></script>
-    <script src='js/menu-interact.js'></script>
     <script src='js/torus_tic_tac_toe.js'></script>
     <script src='js/matchingGame.js'></script>
     <script src='js/test.js'></script>
     <script src='js/test_2.js'></script>
     <script src='js/sphere.js'></script>
+    <script src='js/menu-interact.js'></script>
+   
+    <!--
+    
+    
+    
+     -->
   </body>
 </html>
