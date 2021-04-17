@@ -10,8 +10,6 @@ body, html{
     height: 100%;
     box-sizing:border-box;
     font-family:sans-serif;
-    /*background:radial-gradient(ellipse 50% 50px,
-      red, yellow 10%, #1e90ff 50%, beige);*/
 }
 
 /*bar-menu*/
@@ -63,7 +61,7 @@ body, html{
 }
 
 
-.widget-menu {
+#widget-menu {
     height: 200px;
     display: flex;
     justify-content: center;
@@ -71,7 +69,7 @@ body, html{
 }
 
 
-.widget-menu button {
+#widget-menu button {
     background: linear-gradient(#e0df79, #9198e5); /* Grey background color */
     color: white; 
     display: inline-block; 
@@ -79,9 +77,9 @@ body, html{
     text-decoration: none; /* Remove underline from links */
 }
 
-/* .widget-menu button:hover{
-    background-color: #ccc; 
-} */
+#widget-menu button:hover{
+    background: #ccc; 
+}
 
 canvas {
     display: block;
