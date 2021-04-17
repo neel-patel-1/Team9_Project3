@@ -14,8 +14,8 @@
     <!--div for game selection-->
     <div class="menu-bar">
       <ul>
-        <li><a href='#'><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-        <li><a href='#'><i class="fa fa-arrows-alt" aria-hidden="true"></i> 3D Games</a>
+        <li><a href='#' id="select_home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+        <li><a href='#' id="select_3d"><i class="fa fa-arrows-alt" aria-hidden="true"></i> 3D Games</a>
           <div class="sub-menu">
             <ul>
               <li><a href="#">Torus Tic Tac Toe</a></li>
@@ -23,27 +23,35 @@
             </ul>
           </div>
         </li>
-        <li><a href='#'><i class="fa fa-arrows" aria-hidden="true"></i> 2D Games</a></li>
-        <li><a href='#'><i class="fa fa-picture-o" aria-hidden="true"></i> Art/Models</a></li>
+        <li><a href='#' id="select_2d"><i class="fa fa-arrows" aria-hidden="true"></i> 2D Games</a></li>
+        <li><a href='#' id="art"><i class="fa fa-picture-o" aria-hidden="true"></i> Art/Models</a></li>
       </ul>
     </div>
-    <div class="widget-menu">
 
-        <button id="torusTicTacToe">TorusTicTacToe</button>
+    <div id="gamediv" hidden>
+      <div class="widget-menu" id="games_3d">
+        <!-- <button id="torusTicTacToe">TorusTicTacToe</button>
         <button id="matchingGame">Matching Game</button>
-        <button id="hordeGame">Test</button>
-	      <button id="ball">Ball</button>
-        <button id="swarm">Swarm</button>
-        
-    </div> 
-    <!--instructions appended to this div-->
-    <div id="instructions"></div>
-    <!--games are appended to this div-->
-    <div id="game"></div>
+        <button id="ball">Ball</button> -->
+      </div>
+      <div class="widget-menu" id="games_2d">
+        <!-- <button id="hordeGame">Test</button>
+        <button id="swarm">Swarm</button> -->
+      </div>
+      <!--instructions appended to this div-->
+      <div id="instructions"></div>
+      <!--games are appended to this div-->
+      <div id="game"></div>
+    </div>
+    <div id="home"></div>
+    <div id="artdiv" hidden>
+      
+    </div>
 
 
     <script src='js/three.js'></script>
     <script src='js/OrbitControls.js'></script>
+    <script src='js/menu-interact.js'></script>
     <script src='js/torus_tic_tac_toe.js'></script>
     <script src='js/matchingGame.js'></script>
     <script src='js/test.js'></script>

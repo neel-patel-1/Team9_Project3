@@ -79,9 +79,9 @@ body, html{
     text-decoration: none; /* Remove underline from links */
 }
 
-.widget-menu button:hover {
-    background-color: #ccc; /* Dark grey background on mouse-over */
-}
+/* .widget-menu button:hover{
+    background-color: #ccc; 
+} */
 
 canvas {
     display: block;
