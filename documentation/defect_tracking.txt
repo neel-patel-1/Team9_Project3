@@ -1,0 +1,5 @@
+4/16: Neel ->Hiding Game Selection Div does not hide buttons
+    -Fixed 4/17 (using css .style.display attribute)
+
+4/17: Neel ->Snake backtracking crosses boundary
+    -
