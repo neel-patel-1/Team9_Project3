@@ -5,7 +5,7 @@ const snakeInit = () => {
     document.querySelector('#instructions').textContent = ' ';
     //append instructions
     let instr = document.createElement('p');
-    instr.textContent = 'Move the Square!';
+    instr.textContent = 'WASD to change snake\'s direction.';
     document.querySelector('#instructions').appendChild(instr);
 
     const canvas = document.createElement('canvas');
@@ -15,48 +15,75 @@ const snakeInit = () => {
     const ctx = canvas.getContext('2d');
     ctx.fillRect(0,0,canvas.width, canvas.height);
 
-    const rect = {
-        l : 20,
-        w : 20,
-        x : canvas.width/2,
-        y : canvas.width/2,
-        moveV : function(dir){
-            if(dir === 0){
-                this.y-=(this.l);
+    // const snakeGrid = {
+    //     grid : [[],
+    //             [],
+    //             [],
+
+    //             ]
+    // }
+    const game = {
+        snakeStack = [[8,8]],
+        l : canvas.width/17,
+        w : canvas.width/17,
+        x : 8*canvas.width/17,
+        y : 8*canvas.width/17,
+        dir: '\0',
+        begun: false,
+        move : function(){
+            if(dir === 'd' && snakeStack[this.snakeStack.length-1][1]<16){
+                this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][], );
+                this.snakeStack.pop();
+                setInterval( ()=> {
+                    this.move();
+                }, 200);
             }
-            else{
+            else if(dir === 'w'){
                 this.y+=(this.l);
             }
-        },
-        moveH : function(dir){
-            if(dir === 0){
-                this.x-=(this.w);
+            else if(dir === 'a'){
+
             }
-            else{
-                this.x+=(this.w);
+            else if(dir === 's'){
+
             }
         },
+        nextDir : function(newDir){
+            if(newDir !== dir){
+                dir = newDir;
+            }
+        },
+        
         draw: function(){
             ctx.fillStyle = 'Red';
+            for(let i=0; i<)
             ctx.fillRect(this.x,this.y,this.w,this.l);
         }
     }
 
     window.addEventListener("keydown", function(event) {
-        console.log(`KeyboardEvent: key='${event.key}' | code='${event.code}'`);
-        if(event.key === 'd' || event.key === 'ArrowRight'){
+        if(!game.begun){
+            game.begun = true;
             rect.moveH(1);
         }
-        if(event.key === 'a' || event.key === 'ArrowLeft'){
-            rect.moveH(0);
+        if(event.key === 'd' || event.key === 'w' || event.key === 'a' || event.key === 's'){
+                
+                game.nextDir(event.key);
         }
-        if(event.key === 's' || event.key === 'ArrowDown'){
-            rect.moveV(1);
-        }
-        if(event.key === 'w' || event.key === 'ArrowUp'){
-            rect.moveV(0);
-        }
-        rect.draw();
+        // console.log(`KeyboardEvent: key='${event.key}' | code='${event.code}'`);
+        // if(event.key === 'd' || event.key === 'ArrowRight'){
+        //     rect.moveH(1);
+        // }
+        // if(event.key === 'a' || event.key === 'ArrowLeft'){
+        //     rect.moveH(0);
+        // }
+        // if(event.key === 's' || event.key === 'ArrowDown'){
+        //     rect.moveV(1);
+        // }
+        // if(event.key === 'w' || event.key === 'ArrowUp'){
+        //     rect.moveV(0);
+        // }
+        // rect.draw();
         
     });
     
