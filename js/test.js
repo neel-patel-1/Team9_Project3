@@ -22,8 +22,8 @@ const snakeInit = () => {
 
     //             ]
     // }
-    const game = {
-        snakeStack = [[8,8]],
+    let game = {
+        snakeStack : [[8,8]],
         l : canvas.width/17,
         w : canvas.width/17,
         x : 8*canvas.width/17,
@@ -32,7 +32,8 @@ const snakeInit = () => {
         begun: false,
         move : function(){
             if(dir === 'd' && snakeStack[this.snakeStack.length-1][1]<16){
-                this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][], );
+                this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0]+1,
+                    this.snakeStack[this.snakeStack.length-1][1]]);
                 this.snakeStack.pop();
                 setInterval( ()=> {
                     this.move();
@@ -45,7 +46,12 @@ const snakeInit = () => {
 
             }
             else if(dir === 's'){
-
+                this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0]+1,
+                    this.snakeStack[this.snakeStack.length-1][1]]);
+                this.snakeStack.pop();
+                setInterval( ()=> {
+                    this.move();
+                }, 200);
             }
         },
         nextDir : function(newDir){
@@ -56,7 +62,9 @@ const snakeInit = () => {
         
         draw: function(){
             ctx.fillStyle = 'Red';
-            for(let i=0; i<)
+            for(let i=0; i< this.snakeStack.length; i++){
+                ctx.fillRect(this.x,this.y,this.w,this.l);
+            }
             ctx.fillRect(this.x,this.y,this.w,this.l);
         }
     }
