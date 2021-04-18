@@ -61,7 +61,9 @@ const snakeInit = () => {
         },
         
         draw: function(){
-            ctx.fillStyle = 'Red';
+            ctx.fillStyle='#000000';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = '#c34512';
             for(let i=0; i< this.snakeStack.length; i++){
                 ctx.fillRect(this.x,this.y,this.w,this.l);
             }
@@ -72,27 +74,12 @@ const snakeInit = () => {
     window.addEventListener("keydown", function(event) {
         if(!game.begun){
             game.begun = true;
-            rect.moveH(1);
+            // rect.moveH(1);
         }
         if(event.key === 'd' || event.key === 'w' || event.key === 'a' || event.key === 's'){
                 
                 game.nextDir(event.key);
         }
-        // console.log(`KeyboardEvent: key='${event.key}' | code='${event.code}'`);
-        // if(event.key === 'd' || event.key === 'ArrowRight'){
-        //     rect.moveH(1);
-        // }
-        // if(event.key === 'a' || event.key === 'ArrowLeft'){
-        //     rect.moveH(0);
-        // }
-        // if(event.key === 's' || event.key === 'ArrowDown'){
-        //     rect.moveV(1);
-        // }
-        // if(event.key === 'w' || event.key === 'ArrowUp'){
-        //     rect.moveV(0);
-        // }
-        // rect.draw();
-        
     });
     
     window.addEventListener('resize', onWindowResize, false);
@@ -101,6 +88,6 @@ const snakeInit = () => {
         canvas.height = window.innerHeight;
         ctx.fillRect(0,0,canvas.width, canvas.height);
     }
-    rect.draw();
+    // rect.draw();
 }
 
