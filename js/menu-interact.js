@@ -26,6 +26,8 @@ const game2dFuncs = [snakeInit, swarmInit];
 for(let i=0; i<game3dArray.length; i++){
     document.querySelector(game3dArray[i]).addEventListener('click', () => {
         game3dFuncs[i]();
+        document.querySelector('#home').hidden = true;
+        document.querySelector('#artdiv').hidden = true;
         document.querySelector('#widget-menu').style.display = "none";
         document.querySelector('#gamediv').hidden = false;
     })
@@ -33,6 +35,8 @@ for(let i=0; i<game3dArray.length; i++){
 for(let i=0; i<game2dArray.length; i++){
     document.querySelector(game2dArray[i]).addEventListener('click', () => {
         game2dFuncs[i]();
+        document.querySelector('#home').hidden = true;
+        document.querySelector('#artdiv').hidden = true;
         document.querySelector('#widget-menu').style.display = "none";
         document.querySelector('#gamediv').hidden = false;
     })
