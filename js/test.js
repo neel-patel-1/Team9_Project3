@@ -9,8 +9,15 @@ const snakeInit = () => {
     document.querySelector('#instructions').appendChild(instr);
 
     const canvas = document.createElement('canvas');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+
+    canvas.height = window.innerHeight*.8;
+    canvas.width = canvas.height;
+
+    canvas.style.position = 'absolute';
+    canvas.style.margin = 'auto';
+    canvas.style.left = '0';
+    canvas.style.right = '0';
+
     document.getElementById("game").appendChild( canvas );
     const ctx = canvas.getContext('2d');
     ctx.fillRect(0,0,canvas.width, canvas.height);
@@ -97,12 +104,14 @@ const snakeInit = () => {
                 
             game.nextDir(event.key);
         }
+        console.log(event.key,"\n");
     });
     
     window.addEventListener('resize', onWindowResize, false);
     function onWindowResize(){
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+
+        canvas.height = window.innerHeight*.8;
+        canvas.width = canvas.height;
         ctx.fillRect(0,0,canvas.width, canvas.height);
     }
     game.draw();
