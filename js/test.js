@@ -14,71 +14,88 @@ const snakeInit = () => {
     document.getElementById("game").appendChild( canvas );
     const ctx = canvas.getContext('2d');
     ctx.fillRect(0,0,canvas.width, canvas.height);
-
-    // const snakeGrid = {
-    //     grid : [[],
-    //             [],
-    //             [],
-
-    //             ]
-    // }
     let game = {
         snakeStack : [[8,8]],
-        l : canvas.width/17,
+        h: canvas.height/17,
         w : canvas.width/17,
-        x : 8*canvas.width/17,
-        y : 8*canvas.width/17,
         dir: '\0',
         begun: false,
-        move : function(){
-            if(dir === 'd' && snakeStack[this.snakeStack.length-1][1]<16){
-                this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0]+1,
-                    this.snakeStack[this.snakeStack.length-1][1]]);
-                this.snakeStack.pop();
-                setInterval( ()=> {
-                    this.move();
-                }, 200);
-            }
-            else if(dir === 'w'){
-                this.y+=(this.l);
-            }
-            else if(dir === 'a'){
+        /*copy move code with modulo arithmetic for new pos??
+        special : function(){
 
-            }
-            else if(dir === 's'){
+        }
+        */
+        move : function(){
+            if(this.dir === 'd' && this.snakeStack[this.snakeStack.length-1][0]<16){
                 this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0]+1,
                     this.snakeStack[this.snakeStack.length-1][1]]);
-                this.snakeStack.pop();
-                setInterval( ()=> {
+
+                this.snakeStack.shift();
+                this.draw();
+                setTimeout( ()=> {
                     this.move();
-                }, 200);
+                }, 1000);
+            }
+            else if(this.dir === 'w' && this.snakeStack[this.snakeStack.length-1][1]>0){
+                this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0],
+                    this.snakeStack[this.snakeStack.length-1][1]-1]);
+
+                this.snakeStack.shift();
+                this.draw();
+                setTimeout( ()=> {
+                    this.move();
+                }, 1000);
+            }
+            else if(this.dir === 'a' && this.snakeStack[this.snakeStack.length-1][0]>0){
+                this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0]-1,
+                    this.snakeStack[this.snakeStack.length-1][1]]);
+
+                    this.snakeStack.shift();
+                    this.draw();
+                setTimeout( ()=> {
+                    this.move();
+                }, 1000);
+            }
+            else if(this.dir === 's' && this.snakeStack[this.snakeStack.length-1][1]<16){
+                this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0],
+                    this.snakeStack[this.snakeStack.length-1][1]+1]);
+                    this.snakeStack.shift();
+                    this.draw();
+                setTimeout( ()=> {
+                    this.move();
+                }, 1000);
             }
         },
+
         nextDir : function(newDir){
-            if(newDir !== dir){
-                dir = newDir;
+            if( (newDir !== this.dir) && 
+                ( (newDir === 'd' && this.dir !== 'a') ||
+                (newDir === 'w' && this.dir !== 's') ||
+                (newDir === 's' && this.dir !== 'w') ||
+                (newDir === 'a' && this.dir !== 'd') ) ){
+                this.dir = newDir;
             }
         },
         
         draw: function(){
             ctx.fillStyle='#000000';
             ctx.fillRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = '#c34512';
+            ctx.fillStyle = '#FF0000';
             for(let i=0; i< this.snakeStack.length; i++){
-                ctx.fillRect(this.x,this.y,this.w,this.l);
+                ctx.fillRect((this.snakeStack[i][0])*this.w,(this.snakeStack[i][1])*this.h,this.w,this.h);
             }
-            ctx.fillRect(this.x,this.y,this.w,this.l);
         }
     }
 
     window.addEventListener("keydown", function(event) {
-        if(!game.begun){
+        if(!game.begun  && (event.key === 'd' || event.key === 'w' || event.key === 'a' || event.key === 's')){
             game.begun = true;
-            // rect.moveH(1);
+            game.nextDir(event.key);
+            game.move()
         }
         if(event.key === 'd' || event.key === 'w' || event.key === 'a' || event.key === 's'){
                 
-                game.nextDir(event.key);
+            game.nextDir(event.key);
         }
     });
     
@@ -88,6 +105,6 @@ const snakeInit = () => {
         canvas.height = window.innerHeight;
         ctx.fillRect(0,0,canvas.width, canvas.height);
     }
-    // rect.draw();
+    game.draw();
 }
 
