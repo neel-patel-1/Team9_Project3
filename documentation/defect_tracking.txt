@@ -9,3 +9,6 @@
 
 4/21: Neel -> Snake will register unsafe move on multiple keystroke
     - changed nextDir to array of two to compare against old dir up until move() uses value
+
+4/21: Neel -> Canvas append covers dropdown menu
+
