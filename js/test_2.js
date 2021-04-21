@@ -8,76 +8,98 @@ const swarmInit = () => {
     document.querySelector('#instructions').appendChild(instr);
 
     const canvas = document.createElement('canvas');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.height = window.innerHeight*.65;
+    canvas.width = canvas.height;
+
+    canvas.style.position = 'absolute';
+    canvas.style.margin = 'auto';
+    canvas.style.left = '0';
+    canvas.style.right = '0';
+
     document.getElementById("game").appendChild( canvas );
     const ctx = canvas.getContext('2d');
     ctx.fillRect(0,0,canvas.width, canvas.height);
-
     //want a swarm with multiple specks
     //each speck will be drawn towards "swarm center"
     //tokens within swarm center radius add to swarm
     //radius of effects inc w num specks
     //https://stackoverflow.com/questions/64577428/how-i-can-do-a-smooth-movement-of-player-in-canvas-game
-    function Swarm(){
-        this.rangePerSpeck = 5;
-        this.speckArr = Array(Array(2));
-        this.center = [canvas.width/2,canvas.height/2];
-        this.numSpecks = 1;
-        this.radius = this.numSpecks*this.rangePerSpeck;
-        this.moveSpeed = this.radius;
+    const swarm = {
+        mouse : { x: 0, y: 0},
+        
+    }
+    function draw(){
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0,0,canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.arc( swarm.mouse.x * canvas.width, swarm.mouse.y * canvas.height, canvas.width/17, 0, 2 * Math.PI);
+        ctx.fillStyle = '#00FF00';
+        ctx.fill();
+        requestAnimationFrame(draw);
+    }
+    // function Swarm(){
+        
+    //     this.rangePerSpeck = 5;
+    //     this.speckArr = Array(Array(2));
+    //     this.center = [canvas.width/2,canvas.height/2];
+    //     this.numSpecks = 1;
+    //     this.radius = this.numSpecks*this.rangePerSpeck;
+    //     this.moveSpeed = this.radius;
 
-        //test func for drawing circle
-        this.showPlayer = () => {
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(0,0,canvas.width,canvas.height);
-            ctx.beginPath();
-            ctx.arc(this.center[0], this.center[1], this.radius, 0, 2*Math.PI);
-            ctx.fillStyle = '#ff0000';
-            ctx.fill();
-            requestAnimationFrame(this.showPlayer);
-        }
-        this.move = (dir) =>{
-            if(dir === 'w'){
-                this.center[1]-=(this.moveSpeed);
-            }
-            else if(dir === 'a'){
-                this.center[0]-=(this.moveSpeed);
-            }
-            else if(dir === 's'){
-                this.center[1]+=this.moveSpeed;
-            }
-            else if(dir === 'd'){
-                this.center[0]+=this.moveSpeed;
-            }
-            this.showPlayer();
+    //     //test func for drawing circle
+    //     this.showPlayer = () => {
+    //         ctx.fillStyle = '#000000';
+    //         ctx.fillRect(0,0,canvas.width,canvas.height);
+    //         ctx.beginPath();
+    //         ctx.arc(this.center[0], this.center[1], this.radius, 0, 2*Math.PI);
+    //         ctx.fillStyle = '#ff0000';
+    //         ctx.fill();
+    //         requestAnimationFrame(this.showPlayer);
+    //     }
+    //     this.move = (dir) =>{
+    //         if(dir === 'w'){
+    //             this.center[1]-=(this.moveSpeed);
+    //         }
+    //         else if(dir === 'a'){
+    //             this.center[0]-=(this.moveSpeed);
+    //         }
+    //         else if(dir === 's'){
+    //             this.center[1]+=this.moveSpeed;
+    //         }
+    //         else if(dir === 'd'){
+    //             this.center[0]+=this.moveSpeed;
+    //         }
+    //         this.showPlayer();
 
-        }
-        this.drawSpecks = function(){
-            for(let i=0; i<this.numSpecks; i++){
-                this.speckArr[i].show();
-            }
-        }
-        this.addSpeck = function(num){
-            this.numSpecks+=num;
-            this.speckArr.push(new Speck(center[0] + Math.random()*this.radius, center[1] + Math.random()*this.radius));
-        }
+    //     }
+    //     this.drawSpecks = function(){
+    //         for(let i=0; i<this.numSpecks; i++){
+    //             this.speckArr[i].show();
+    //         }
+    //     }
+    //     this.addSpeck = function(num){
+    //         this.numSpecks+=num;
+    //         this.speckArr.push(new Speck(center[0] + Math.random()*this.radius, center[1] + Math.random()*this.radius));
+    //     }
+    // }
+
+
+    //mouse and resize helpers
+    canvas.addEventListener('mousemove', e => onMouseMove(e));
+    function onMouseMove( event ) {//helper function, gets mouse x and y coordinates
+        var rect = canvas.getBoundingClientRect();
+        swarm.mouse.x = ( ( event.clientX - rect.left ) / ( rect.right - rect.left ) );
+        swarm.mouse.y = ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) );
+        console.log(swarm.mouse.x,swarm.mouse.y);//debugging
     }
     
-    const playerSwarm = new Swarm();
-    window.addEventListener("keydown", function(event) {
-        console.log(`KeyboardEvent: key='${event.key}' | code='${event.code}'`);
-        playerSwarm.move(event.key);
-        
-    });
-    
-    window.addEventListener('resize', onWindowResize, false);
+    document.addEventListener('resize', onWindowResize, false);
     function onWindowResize(){
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.height = window.innerHeight*.65;
+        canvas.width = canvas.height;
         ctx.fillRect(0,0,canvas.width, canvas.height);
     }
-    playerSwarm.showPlayer();
+    draw();
     // ctx.fillStyle = '#ff0000';
     // ctx.beginPath();
     // ctx.arc(canvas.width/2, canvas.height/2, 5, 0, 2*Math.PI);
