@@ -27,7 +27,8 @@ const snakeInit = () => {
         newPiece : [Math.floor(Math.random()*7), Math.floor(Math.random()*7)],
         h: canvas.height/17,
         w : canvas.width/17,
-        dir: '\0',
+        //dir: ['\0', '\0'],
+        dir: ['d', '\0'],
         begun: false,
         /*copy move code with modulo arithmetic for new pos??
         special : function(){
@@ -64,7 +65,8 @@ const snakeInit = () => {
             this.newPiece = [tx, ty];
         },  
         move : function(){
-            if(this.dir === 'd' && this.snakeStack[this.snakeStack.length-1][0]<=16){
+            if(this.dir[1] === 'd' && this.snakeStack[this.snakeStack.length-1][0]<16 
+            && this.safeMove(this.snakeStack[this.snakeStack.length-1][0]+1, this.snakeStack[this.snakeStack.length-1][1])){
                 this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0]+1,
                     this.snakeStack[this.snakeStack.length-1][1]]);
                 if(!(this.snakeStack[this.snakeStack.length-1][0] === this.newPiece[0]) ||
@@ -74,13 +76,14 @@ const snakeInit = () => {
                 else{
                     this.genNew();
                 }
-
+                this.dir[0] = this.dir[1];
                 this.draw();
                 setTimeout( ()=> {
                     this.move();
-                }, 1000);
+                }, 250);
             }
-            else if(this.dir === 'w' && this.snakeStack[this.snakeStack.length-1][1]>0){
+            else if(this.dir[1] === 'w' && this.snakeStack[this.snakeStack.length-1][1]>0
+            && this.safeMove(this.snakeStack[this.snakeStack.length-1][0], this.snakeStack[this.snakeStack.length-1][1]-1)){
                 this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0],
                     this.snakeStack[this.snakeStack.length-1][1]-1]);
                 if(!(this.snakeStack[this.snakeStack.length-1][0] === this.newPiece[0]) ||
@@ -90,12 +93,14 @@ const snakeInit = () => {
                 else{
                     this.genNew();
                 }
+                this.dir[0] = this.dir[1];
                 this.draw();
                 setTimeout( ()=> {
                     this.move();
-                }, 1000);
+                }, 250);
             }
-            else if(this.dir === 'a' && this.snakeStack[this.snakeStack.length-1][0]>0){
+            else if(this.dir[1] === 'a' && this.snakeStack[this.snakeStack.length-1][0]>0
+            && this.safeMove(this.snakeStack[this.snakeStack.length-1][0]-1, this.snakeStack[this.snakeStack.length-1][1])){
                 this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0]-1, this.snakeStack[this.snakeStack.length-1][1]]);
                 if(!(this.snakeStack[this.snakeStack.length-1][0] === this.newPiece[0]) ||
                 !(this.snakeStack[this.snakeStack.length-1][1] === this.newPiece[1])){
@@ -104,12 +109,14 @@ const snakeInit = () => {
                 else{
                     this.genNew();
                 }
+                this.dir[0] = this.dir[1];
                 this.draw();
                 setTimeout( ()=> {
                     this.move();
-                }, 1000);
+                }, 250);
             }
-            else if(this.dir === 's' && this.snakeStack[this.snakeStack.length-1][1]<16){
+            else if(this.dir[1] === 's' && this.snakeStack[this.snakeStack.length-1][1]<16
+            && this.safeMove(this.snakeStack[this.snakeStack.length-1][0], this.snakeStack[this.snakeStack.length-1][1]+1)){
                 this.snakeStack.push([this.snakeStack[this.snakeStack.length-1][0], this.snakeStack[this.snakeStack.length-1][1]+1]);
                 if(!(this.snakeStack[this.snakeStack.length-1][0] === this.newPiece[0]) ||
                 !(this.snakeStack[this.snakeStack.length-1][1] === this.newPiece[1])){
@@ -118,20 +125,27 @@ const snakeInit = () => {
                 else{
                     this.genNew();
                 }
+                this.dir[0] = this.dir[1];
                 this.draw();
                 setTimeout( ()=> {
                     this.move();
-                }, 1000);
+                }, 250);
             }
         },
-
+        /*
+        trusting the user's new direction too early, must validate user's direction is not parallel to oldDir
+        dir : [old, new];
+        if(old == 'd' and uChoice == 'a') we have a problem
+        //when can we trust that the user has finished fucking with dir: better be done once snake is ready to move
+        //once snake is ready to move, change dir[0] to dir[1] iff dir[1] is not parallel to dir[0]
+        */  
         nextDir : function(newDir){
-            if( (newDir !== this.dir) && 
-                ( (newDir === 'd' && this.dir !== 'a') ||
-                (newDir === 'w' && this.dir !== 's') ||
-                (newDir === 's' && this.dir !== 'w') ||
-                (newDir === 'a' && this.dir !== 'd') ) ){
-                this.dir = newDir;
+            if( (newDir !== this.dir[1]) && 
+                ( (newDir === 'd' && this.dir[0] !== 'a') ||
+                (newDir === 'w' && this.dir[0] !== 's') ||
+                (newDir === 's' && this.dir[0] !== 'w') ||
+                (newDir === 'a' && this.dir[0] !== 'd') ) ){
+                this.dir[1] = newDir;
             }
         },
         
@@ -139,14 +153,28 @@ const snakeInit = () => {
             ctx.fillStyle='#000000';
             ctx.fillRect(0,0,canvas.width,canvas.height);
             ctx.fillStyle = '#FF0000';
-            for(let i=0; i< this.snakeStack.length; i++){
+            for(let i=0; i< this.snakeStack.length-1; i++){
                 ctx.fillRect((this.snakeStack[i][0])*this.w,(this.snakeStack[i][1])*this.h,this.w,this.h);
             }
+            ctx.fillStyle = '#0000FF';
+            ctx.fillRect((this.snakeStack[this.snakeStack.length-1][0])*this.w,(this.snakeStack[this.snakeStack.length-1][1])*this.h,this.w,this.h);
             ctx.beginPath();
             ctx.arc( this.newPiece[0]*(canvas.width/17)+(this.w)/2, this.newPiece[1]*(canvas.height/17)+(this.h)/2, 
                 (this.w)/3, 0, 2 * Math.PI);
             ctx.fillStyle = '#00FF00';
             ctx.fill();
+        },
+
+        safeMove: function(x, y){
+            for(let i=1; i<this.snakeStack.length; i++){
+                if(x === this.snakeStack[i][0] && y === this.snakeStack[i][1]){
+                    console.log(this.snakeStack[i]);
+                    console.log(this.snakeStack);
+                    this.draw();
+                    return false;
+                }
+            }
+            return true;
         }
     }
 

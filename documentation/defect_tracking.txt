@@ -2,7 +2,10 @@
     -Fixed 4/17 (using css .style.display attribute)
 
 4/17: Neel ->Snake backtracking crosses boundary
-    -
+    - changed snake piece drawing and grid size
 
 4/18: Neel ->Selecting game from drop-down menu does not hide home-Div
     - changed hidden attribute on drop-down click
+
+4/21: Neel -> Snake will register unsafe move on multiple keystroke
+    - changed nextDir to array of two to compare against old dir up until move() uses value
