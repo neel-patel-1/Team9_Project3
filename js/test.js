@@ -10,7 +10,7 @@ const snakeInit = () => {
 
     const canvas = document.createElement('canvas');
 
-    canvas.height = window.innerHeight*.8;
+    canvas.height = window.innerHeight*.65;
     canvas.width = canvas.height;
 
     canvas.style.position = 'absolute';
@@ -194,7 +194,7 @@ const snakeInit = () => {
     window.addEventListener('resize', onWindowResize, false);
     function onWindowResize(){
 
-        canvas.height = window.innerHeight*.8;
+        canvas.height = window.innerHeight*.65;
         canvas.width = canvas.height;
         ctx.fillRect(0,0,canvas.width, canvas.height);
     }
