@@ -11,4 +11,4 @@
     - changed nextDir to array of two to compare against old dir up until move() uses value
 
 4/21: Neel -> Canvas append covers dropdown menu
-
+    - changed z-index of drop down menu to 100 
