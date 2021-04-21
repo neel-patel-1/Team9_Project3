@@ -24,7 +24,7 @@ const ballInit = () => {
 	
 	//create canvas and context
 	let gcanvas = document.createElement('canvas');
-	document.getElementById("game").appendChild(gcanvas);
+	//document.getElementById("game").appendChild(gcanvas);
 	gcanvas.width = 300;
 	gcanvas.height = 300;
 	let ctx = gcanvas.getContext('2d');
@@ -32,6 +32,18 @@ const ballInit = () => {
 	ctx.fillRect(0,0,300,300);
 	ctx.fillStyle='red';
 	ctx.fillRect(0,0,100,100);
+	var texture = new THREE.CanvasTexture(gcanvas);
+
+
+	//background canvas for 2d display
+	let background = document.createElement('canvas');
+    background.width = window.innerWidth;
+    background.height = window.innerHeight;
+    backgroundContext = background.getContext('2d');
+    backgroundContext.fillRect(0, 0, background.width, background.height);
+    
+    var backgroundTexture = new THREE.CanvasTexture(background);
+    scene.background = backgroundTexture;
 
 	//ball location
 	let ballX = 20;
@@ -61,6 +73,7 @@ const ballInit = () => {
 	
 	function animate() {
 		canvasTex.needsUpdate = true;
+		backgroundTexture.needsUpdate = true;
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);
 		draw();
@@ -95,7 +108,8 @@ const ballInit = () => {
 		let theta = ballX*(2*3.1415/w) + offset;
 		//derivative of great circle path
 			
-		
+		//change background
+		backgroundContext.drawImage(gcanvas,0,0);
 		
 		ballY = (Math.atan(1/(c*Math.sin(theta))));
 		ballY = ((ballY%Math.PI)+Math.PI)%Math.PI;
