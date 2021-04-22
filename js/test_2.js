@@ -19,70 +19,42 @@ const swarmInit = () => {
     document.getElementById("game").appendChild( canvas );
     const ctx = canvas.getContext('2d');
     ctx.fillRect(0,0,canvas.width, canvas.height);
-    //want a swarm with multiple specks
-    //each speck will be drawn towards "swarm center"
-    //tokens within swarm center radius add to swarm
-    //radius of effects inc w num specks
-    //https://stackoverflow.com/questions/64577428/how-i-can-do-a-smooth-movement-of-player-in-canvas-game
-    const swarm = {
+    
+    let swarm = {
         mouse : { x: 0, y: 0},
-        
+        rad : canvas.width/40,
+        outerRad : canvas.width/20,
+        flyArr : [[canvas.width/2, canvas.height/2]],
+        draw : function (){
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0,0,canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc( swarm.mouse.x * canvas.width, swarm.mouse.y * canvas.height, swarm.rad, 0, 2 * Math.PI);
+            ctx.fillStyle = '#00FF00';
+            ctx.fill();
+            for(let i=0; i<swarm.flyArr.length; i++){
+                if(swarm.flyArr[i][0] < (swarm.mouse.x*canvas.width)){
+                    swarm.flyArr[i][0]+=canvas.width/100;
+                }
+                else{
+                    swarm.flyArr[i][0]-=canvas.width/100;
+                }
+                if(swarm.flyArr[i][1] < (swarm.mouse.y*canvas.height)){
+                    swarm.flyArr[i][1]+=canvas.height/100;
+                }
+                else{
+                    swarm.flyArr[i][1]-=canvas.height/100;
+                }
+            }
+            ctx.beginPath();
+            ctx.arc( swarm.flyArr[0][0], swarm.flyArr[0][1], swarm.rad/4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#FF0000';
+            ctx.fill();
+            requestAnimationFrame(swarm.draw);
+        }
     }
-    function draw(){
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(0,0,canvas.width, canvas.height);
-        ctx.beginPath();
-        ctx.arc( swarm.mouse.x * canvas.width, swarm.mouse.y * canvas.height, canvas.width/17, 0, 2 * Math.PI);
-        ctx.fillStyle = '#00FF00';
-        ctx.fill();
-        requestAnimationFrame(draw);
-    }
-    // function Swarm(){
-        
-    //     this.rangePerSpeck = 5;
-    //     this.speckArr = Array(Array(2));
-    //     this.center = [canvas.width/2,canvas.height/2];
-    //     this.numSpecks = 1;
-    //     this.radius = this.numSpecks*this.rangePerSpeck;
-    //     this.moveSpeed = this.radius;
 
-    //     //test func for drawing circle
-    //     this.showPlayer = () => {
-    //         ctx.fillStyle = '#000000';
-    //         ctx.fillRect(0,0,canvas.width,canvas.height);
-    //         ctx.beginPath();
-    //         ctx.arc(this.center[0], this.center[1], this.radius, 0, 2*Math.PI);
-    //         ctx.fillStyle = '#ff0000';
-    //         ctx.fill();
-    //         requestAnimationFrame(this.showPlayer);
-    //     }
-    //     this.move = (dir) =>{
-    //         if(dir === 'w'){
-    //             this.center[1]-=(this.moveSpeed);
-    //         }
-    //         else if(dir === 'a'){
-    //             this.center[0]-=(this.moveSpeed);
-    //         }
-    //         else if(dir === 's'){
-    //             this.center[1]+=this.moveSpeed;
-    //         }
-    //         else if(dir === 'd'){
-    //             this.center[0]+=this.moveSpeed;
-    //         }
-    //         this.showPlayer();
-
-    //     }
-    //     this.drawSpecks = function(){
-    //         for(let i=0; i<this.numSpecks; i++){
-    //             this.speckArr[i].show();
-    //         }
-    //     }
-    //     this.addSpeck = function(num){
-    //         this.numSpecks+=num;
-    //         this.speckArr.push(new Speck(center[0] + Math.random()*this.radius, center[1] + Math.random()*this.radius));
-    //     }
-    // }
-
+    
 
     //mouse and resize helpers
     canvas.addEventListener('mousemove', e => onMouseMove(e));
@@ -99,7 +71,7 @@ const swarmInit = () => {
         canvas.width = canvas.height;
         ctx.fillRect(0,0,canvas.width, canvas.height);
     }
-    draw();
+    requestAnimationFrame(swarm.draw);
     // ctx.fillStyle = '#ff0000';
     // ctx.beginPath();
     // ctx.arc(canvas.width/2, canvas.height/2, 5, 0, 2*Math.PI);
