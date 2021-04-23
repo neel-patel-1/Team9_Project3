@@ -7,7 +7,7 @@ const gravityInit = () => {
 	document.querySelector('#instructions').textContent = ' ';
 	
     let instr = document.createElement('p');
-    instr.textContent = 'Use K and L keys to move platform - Use Mouse to move camera';
+    instr.textContent = 'Click to add a ball';
     document.querySelector('#instructions').appendChild(instr);
     //initialize camera, scene, renderer, add Orbital Controls
   
