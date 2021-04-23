@@ -4,8 +4,6 @@ const ballInit = () => {
 	
 
     document.querySelector('#game').textContent = ' ';
-	document.querySelector('#instructions').textContent = ' ';
-	
     let instr = document.createElement('p');
     instr.textContent = 'Use K and L keys to move platform - Use Mouse to move camera';
     document.querySelector('#instructions').appendChild(instr);
@@ -21,6 +19,8 @@ const ballInit = () => {
     renderer.setSize( window.innerWidth*0.75, window.innerHeight*0.75);
     document.getElementById("game").appendChild( renderer.domElement );
 	
+	
+	//create canvas and context
 	
 
 	//background canvas
@@ -90,11 +90,11 @@ const ballInit = () => {
 			switch(Math.floor(dfC*3)) {
   				case 0:
 					c = 10;
-					offset += (Math.PI)+(0.02);
+					offset += (Math.PI)+(0.06);
 					break;
 				case 1:
 					c = 2;
-					offset += (Math.PI)+(0.2);
+					offset += (Math.PI)+(0.1);
 					break;
 				case 2:
 					c = 0.3;
@@ -159,6 +159,7 @@ const ballInit = () => {
 		let w = background.width;
 		let theta = ballX*(2*3.1415/w) + offset;	
 		let phi = Math.PI*ballY/h;
+		
 		
 
 		ballY = (Math.atan(1/(c*Math.sin(theta))));
