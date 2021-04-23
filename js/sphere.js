@@ -128,8 +128,14 @@ document.querySelector('#ball').addEventListener('click', () => {
 		dtheta = ball_h/(2*Math.PI);//change in theta that gives the width
 		let ball_w = ball_h/calcWidth(phi, dtheta);
 		backgroundContext.fillStyle = 'blue';
+
+
+		//draw ball - 3 are drawn in case the paddle goes over edge of canvas
 		backgroundContext.fillRect(ballX-ball_w, ballY-ball_h, ball_w*2, ball_h*2);
-			
+		backgroundContext.fillRect(ballX-ball_w-w, ballY-ball_h, ball_w*2, ball_h*2);
+		backgroundContext.fillRect(ballX-ball_w+w, ballY-ball_h, ball_w*2, ball_h*2);
+		ballX = (ballX%w+w)%w;
+	
 		//draw paddle - 3 are drawn in case the paddle goes over edge of canvas
 		backgroundContext.fillRect(playerX-20, h/2, 40, 10);
 		backgroundContext.fillRect(playerX-20+w, h/2, 40, 10);
