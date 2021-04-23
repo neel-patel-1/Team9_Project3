@@ -5,7 +5,7 @@ document.querySelector('#ball').addEventListener('click', () => {
 
     document.querySelector('#game').textContent = ' ';
     let instr = document.createElement('p');
-    instr.textContent = 'Use K and L keys to move platform';
+    instr.textContent = 'Use K and L keys to move platform - Use Mouse to move camera';
     document.querySelector('#instructions').appendChild(instr);
     //initialize camera, scene, renderer, add Orbital Controls
   
@@ -16,21 +16,25 @@ document.querySelector('#ball').addEventListener('click', () => {
     const scene =  new THREE.Scene();
 
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight);
+    renderer.setSize( window.innerWidth*0.75, window.innerHeight*0.75);
     document.getElementById("game").appendChild( renderer.domElement );
 	
 	
 	//create canvas and context
-	let gcanvas = document.createElement('canvas');
-	document.getElementById("game").appendChild(gcanvas);
-	gcanvas.width = 300;
-	gcanvas.height = 300;
-	let ctx = gcanvas.getContext('2d');
-	ctx.fillStyle='white';
-	ctx.fillRect(0,0,300,300);
-	ctx.fillStyle='red';
-	ctx.fillRect(0,0,100,100);
+	
 
+	//background canvas
+	let background = document.createElement('canvas');
+   	background.width = 300;
+    	background.height = 300;
+    	backgroundContext = background.getContext('2d');
+    	//backgroundContext.fillRect(0, 0, background.width, background.height);
+    	
+	
+    	var backgroundTexture = new THREE.CanvasTexture(background);
+    	//scene.background = backgroundTexture;
+
+	
 	//ball location
 	let ballX = 20;
 	let ballY = 80;
@@ -42,23 +46,21 @@ document.querySelector('#ball').addEventListener('click', () => {
 	let c = 20;//slope of trajectory
 	let dtheta = 0.1;
 
-	let playerX = (gcanvas.width/2);//player position
+	let playerX = (background.width/2);//player position
 	
-	var canvasTex = new THREE.CanvasTexture(gcanvas);
 
 
 	//draw a ball
 	const geometry = new THREE.SphereGeometry(1,32,24);
-	const material = new THREE.MeshBasicMaterial({map: canvasTex});
+	const material = new THREE.MeshBasicMaterial({map: backgroundTexture});
 	const ball = new THREE.Mesh(geometry, material);
 	
 	const controls = new THREE.OrbitControls(camera, renderer.domElement);
-	 controls.minDistance = 5;
+	controls.minDistance = 5;
 
 	scene.add(ball);
 	function animate() {
-		//moveCamera();
-		canvasTex.needsUpdate = true;
+		backgroundTexture.needsUpdate = true;
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);
 		calcPos();
@@ -81,8 +83,8 @@ document.querySelector('#ball').addEventListener('click', () => {
 	}
 	
 	function collision(){
-		let h = gcanvas.height;
-		let w = gcanvas.width;
+		let h = background.height;
+		let w = background.width;
 		if(Math.abs(ballX-playerX) < 20 && Math.abs(ballY-(h/2))<10){
 			let dfC = Math.abs(ballX-playerX)/20;//distance from center of paddle	
 			switch(Math.floor(dfC*3)) {
@@ -104,20 +106,20 @@ document.querySelector('#ball').addEventListener('click', () => {
 	}
 
 	function draw(){
-		let h = gcanvas.height;
-		let w = gcanvas.width;
+		let h = background.height;
+		let w = background.width;
 
-		ctx.fillStyle='gray';
-		ctx.fillRect(0,0,300,300);
+		backgroundContext.fillStyle='gray';
+		backgroundContext.fillRect(0,0,300,300);
 
-		ctx.fillStyle='white';
+		backgroundContext.fillStyle='white';
 		
 		let x = 0;
 		let y = 0;
 		let grid = 30;
 		for(y = 0; y < grid; y ++){
 			for(x = 0; x < grid; x ++){
-			ctx.fillRect(x*(w/grid),y*(h/grid),(w/grid)*0.9,(h/grid)*0.9);
+			backgroundContext.fillRect(x*(w/grid),y*(h/grid),(w/grid)*0.9,(h/grid)*0.9);
 			}
 		}
 
@@ -125,10 +127,18 @@ document.querySelector('#ball').addEventListener('click', () => {
 		let ball_h = 5;
 		dtheta = ball_h/(2*Math.PI);//change in theta that gives the width
 		let ball_w = ball_h/calcWidth(phi, dtheta);
-		ctx.fillStyle = 'blue';
-		ctx.fillRect(ballX-ball_w, ballY-ball_h, ball_w*2, ball_h*2);
-		
-		ctx.fillRect(playerX-20, h/2, 40, 10);
+		backgroundContext.fillStyle = 'blue';
+		backgroundContext.fillRect(ballX-ball_w, ballY-ball_h, ball_w*2, ball_h*2);
+			
+		//draw paddle - 3 are drawn in case the paddle goes over edge of canvas
+		backgroundContext.fillRect(playerX-20, h/2, 40, 10);
+		backgroundContext.fillRect(playerX-20+w, h/2, 40, 10);
+		backgroundContext.fillRect(playerX-20-w, h/2, 40, 10);
+
+		playerX = (playerX%w+w)%w;
+
+		//change background
+		backgroundContext.drawImage(background,0,0);
 
 
 	}
@@ -139,8 +149,8 @@ document.querySelector('#ball').addEventListener('click', () => {
 		return width
 	}
 	function calcPos(){
-		let h = gcanvas.height;
-		let w = gcanvas.width;
+		let h = background.height;
+		let w = background.width;
 		let theta = ballX*(2*3.1415/w) + offset;	
 		let phi = Math.PI*ballY/h;
 		
