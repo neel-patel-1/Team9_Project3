@@ -1,7 +1,7 @@
 /*Menu buttons will hide all divs except the one the user has chosen
 Default div on display should be the home div */
-const game3dArray = ["#torusTicTacToe", "#matchingGame", "#ball"];
-const game3dFuncs = [tictactoeinit, matchingInit, ballInit];
+const game3dArray = ["#torusTicTacToe", "#matchingGame", "#ball", "#grav"];
+const game3dFuncs = [tictactoeinit, matchingInit, ballInit, gravityInit];
 const game2dArray = ["#snake", "#swarm"];
 const game2dFuncs = [snakeInit, swarmInit];
 

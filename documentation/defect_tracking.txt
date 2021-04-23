@@ -3,6 +3,9 @@
 
 4/17: Neel ->Snake backtracking crosses boundary
     - changed snake piece drawing and grid size
+    
+4/16-18: Griffin -> Speed of ball over sphere is irregular
+    - updated increment of x position of ball based on magnitude of slope of trajectory
 
 4/18: Neel ->Selecting game from drop-down menu does not hide home-Div
     - changed hidden attribute on drop-down click
@@ -12,3 +15,9 @@
 
 4/21: Neel -> Canvas append covers dropdown menu
     - changed z-index of drop down menu to 100 
+    
+4/23: Griffin -> Paddle in sphere pong goes over edge of canvas
+    - updated position of paddle and ball to keep them on the canvas, drew three of each
+
+4/23: Griffin -> Game runs slowly
+    - removed second canvas element for background
