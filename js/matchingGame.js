@@ -233,9 +233,27 @@ const matchingInit = (test) => {
         /*
         Test 1: Passing two matching tiles to matchmaker will remove them from the scene.
         */
+
+        function t1(){
+            console.log('Test 1: Attempting mismatch does not remove tiles:');
+            let i1 = Math.floor(Math.random()*16);
+            let i2 = Math.floor(Math.random()*16);
+            
+            //check : colorMap.idColors.find(scene.children[i1].uuid)
+            matchMaker.add(scene.children[i1]);
+            matchMaker.add(scene.children[i2]);
+            if(scene.children.length == numTiles){
+                console.log('PASSED')
+                return (Promise.resolve());
+            }
+            else{
+                console.log('FAILED');
+                return (Promise.resolve());
+            }
+        }
        console.log('Test 2:');
        function popI(i){
-            console.log(`Matching pair ${i} removes tiles from the scene: `);
+            console.log(`Matching pair ${i+1} removes tiles from the scene: `);
             let olen = scene.children.length;
             let i1 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][0]);
             let i2 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][1]);
@@ -262,12 +280,12 @@ const matchingInit = (test) => {
         function t2(){
             console.log(`Test 3: Matching pair removes tiles from the scene: `);
             if(matchMaker.hasWon === true){
-                console.log(`PASSED`)
-                return new Promise.resolve();
+                console.log(`PASSED`);
+                return (Promise.resolve());
             }
         }
 
-        popI(1).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI)
+        popI(0).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI)
         .then(t2);
 
         
