@@ -88,11 +88,11 @@ document.querySelector('#ball').addEventListener('click', () => {
 			switch(Math.floor(dfC*3)) {
   				case 0:
 					c = 10;
-					offset += (Math.PI)+(0.1);
+					offset += (Math.PI)+(0.02);
 					break;
 				case 1:
 					c = 2;
-					offset += (Math.PI)+(0.1);
+					offset += (Math.PI)+(0.2);
 					break;
 				case 2:
 					c = 0.3;
