@@ -5,7 +5,7 @@ const snakeInit = () => {
     document.querySelector('#instructions').textContent = ' ';
     //append instructions
     let instr = document.createElement('p');
-    instr.textContent = 'WASD to change snake\'s direction.';
+    instr.textContent = 'Use WASD keys to change snake\'s direction. Collecting circles increases length. Don\'t collide with walls or snake.';
     document.querySelector('#instructions').appendChild(instr);
 
     const canvas = document.createElement('canvas');
@@ -131,6 +131,9 @@ const snakeInit = () => {
                     this.move();
                 }, 250);
             }
+            else{
+                this.gameOver();
+            }
         },
         /*
         trusting the user's new direction too early, must validate user's direction is not parallel to oldDir
@@ -164,7 +167,15 @@ const snakeInit = () => {
             ctx.fillStyle = '#00FF00';
             ctx.fill();
         },
-
+        gameOver: function(){
+            ctx.fillStyle='#000000';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.textAlign="center"; 
+            ctx.textBaseline = "middle";
+            ctx.font="20px Georgia";
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillText("GAME OVER",canvas.width/2,canvas.height/2);
+        },
         safeMove: function(x, y){
             for(let i=1; i<this.snakeStack.length; i++){
                 if(x === this.snakeStack[i][0] && y === this.snakeStack[i][1]){
@@ -193,10 +204,9 @@ const snakeInit = () => {
     
     window.addEventListener('resize', onWindowResize, false);
     function onWindowResize(){
-
         canvas.height = window.innerHeight*.65;
         canvas.width = canvas.height;
-        ctx.fillRect(0,0,canvas.width, canvas.height);
+        game.draw();
     }
     game.draw();
 }
