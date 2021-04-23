@@ -233,55 +233,45 @@ const matchingInit = (test) => {
         /*
         Test 1: Passing two matching tiles to matchmaker will remove them from the scene.
         */
-       function t1(){
-            console.log("Test 1: Matching removes tile from the scene: ");
+       console.log('Test 2:');
+       function popI(i){
+            console.log(`Matching pair ${i} removes tiles from the scene: `);
             let olen = scene.children.length;
-            let i1 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[0][0]);
-            let i2 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[0][1]);
+            let i1 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][0]);
+            let i2 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][1]);
             matchMaker.add(scene.children[i1]);
             matchMaker.add(scene.children[i2]);
-            // console.log(colorMap.idColors[0][0], colorMap.idColors[0][1]);
-            // console.log(scene.children[i1], scene.children[i2]);
-            setTimeout(() => {
-                if(scene.children.length === olen-2){
-                    console.log("PASSED");
-                }
-                else{
-                    console.log("FAILED");
-                }
-                console.log(scene.children.length);
-            }, 1050);  
-       }
-        
-
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    if(scene.children.length === olen-2){
+                        // console.log(scene.children.length);
+                        console.log("PASSED");
+                        resolve(i+1);
+                    }
+                    else{
+                        console.log("FAILED");
+                        // console.log(scene.children.length);
+                        resolve(i+1);
+                    }
+                }, 1050);  
+            })
+        }
         /*
         Test 2: Passing all matching tiles to matchmaker correctly will result in a win
         */
-       function t2(){
-            console.log("Test 2: Win Condition on all tiles matched: ");
-            for(let i=0; i<numTiles/2; i++){ 
-                let i1 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][0]);
-                let i2 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][1]);
-                matchMaker.add(scene.children[i1]);
-                matchMaker.add(scene.children[i2]);
-                setTimeout(() => {
-                    matchMaker.add(scene.children[i1]);
-                    matchMaker.add(scene.children[i2]);
-                    console.log(scene.children.length);
-                }, 1050);
+        function t2(){
+            console.log(`Test 3: Matching pair removes tiles from the scene: `);
+            if(matchMaker.hasWon === true){
+                console.log(`PASSED`)
+                return new Promise.resolve();
             }
-            if(scene.children.length === 0 && matchMaker.hasWon === true){
-                console.log("PASSED")
-            }
-            function nextTime(){
-                
-            }
-       }
+        }
+
+        popI(1).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI)
+        .then(t2);
+
         
-        // console.log(colorMap.idColors);
-        // console.log(i1, i2, testChild);
-        
-       t1();
+
     }
 
     
