@@ -1,5 +1,5 @@
 //add event listener for torustictactoe button
-const tictactoeinit = () => {
+const tictactoeinit = (test) => {
     //clear child elements of game div
     document.querySelector('#game').textContent = ' ';
     document.querySelector('#instructions').textContent = ' ';
@@ -294,5 +294,88 @@ const tictactoeinit = () => {
      */
     function mod(n, m) {
         return ((n % m) + m) % m;
+    }
+
+
+
+    //testing for on-click test
+    if(test){
+        //test 1
+        console.log("Torus Tic Tac Toe Tests: ");
+        function t1(){
+            console.log("Test 1: ");
+            game.board = [['.','.','.'],
+            ['X','X','.'],
+            ['.','.','.']];
+            game.row = 1;
+            game.col = 1;
+            if(checkWin() === true){
+                console.log("FAILED");
+            }
+            else{
+                game.board[1][2] = 'X';
+                game.col = 2;
+                if(checkWin() === true){
+                    console.log("PASSED");
+                }
+                else{
+                    console.log("FAILED");
+                }
+            }
+        }
+        function t2(){
+            console.log("Test 2: ");
+            game.board = [['O','.','.'],
+            ['X','O','.'],
+            ['.','.','.']];
+            game.row = 0;
+            game.col = 0;
+            game.next = 'O';
+            if(checkWin() === true){
+                console.log("FAILED");
+            }
+            else{
+                game.next = 'X';
+                game.board[1][2] = 'X';
+                game.next = 'O';
+                game.board[2][2] = 'O';
+                game.row = 2;
+                game.col = 2;
+                if(checkWin() === true){
+                    console.log("PASSED");
+                }
+                else{
+                    console.log("FAILED");
+                }
+            }
+        }
+        function t3(){
+            let failed = false;
+            console.log("Test 3: ");
+            game.board = [['O','O','X'],
+            ['.','O','.'],
+            ['O','X','X']];
+            for(let i=0; i<3; i++){
+                for(let j=0; j<3; j++){
+                    game.row = i;
+                    game.col = j;
+                    game.next = game.board[i][j];
+                    if(checkWin() === true){
+                        failed = true;
+                    }
+                }
+            }
+            if(failed == false){
+                console.log("PASSED");
+            }
+            else{
+                console.log("FAILED");
+            }
+        }
+        t1();
+        t2();
+        t3();
+
+        
     }
 }
