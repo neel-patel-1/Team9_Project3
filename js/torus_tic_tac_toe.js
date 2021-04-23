@@ -17,7 +17,7 @@ const tictactoeinit = () => {
     const scene =  new THREE.Scene();
 
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth, window.innerHeight);
     document.getElementById("game").appendChild( renderer.domElement );
 
     let gameSkin = document.createElement('canvas');	
