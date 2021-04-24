@@ -48,7 +48,7 @@ const gravityInit = () => {
 
 	function sceneInit(){
 	
-		const light = new THREE.HemisphereLight( 0x0fffbb, 0xf80820, 1 );
+		const light = new THREE.HemisphereLight( 0xffffff, 0x130820, 1 );
 		scene.add( light );
 
 		const controls = new THREE.OrbitControls( camera, renderer.domElement );
@@ -61,12 +61,12 @@ const gravityInit = () => {
 			let material = new THREE.MeshLambertMaterial( {color: 0xff0066} );
 			let ball = new THREE.Mesh( geometry, material );
 			scene.add( ball );
-			ball.position.x = Math.random()*6-3;
-			ball.position.y = Math.random()*6-3;
-			ball.position.z = Math.random()*6-3;
+			ball.position.x = Math.random()*10-5;
+			ball.position.y = Math.random()*10-5;
+			ball.position.z = Math.random()*10-5;
 			numBalls ++;
 			balls.push(ball);
-			veloc.push([0,0,0]);//[Math.random()*0.1-0.05,Math.random()*0.1-0.05,Math.random()*0.1-0.05]);
+			veloc.push([Math.random()*0.1-0.05,Math.random()*0.1-0.05,Math.random()*0.1-0.05]);
 		}
 	}
 	
