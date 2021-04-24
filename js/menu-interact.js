@@ -5,29 +5,12 @@ const game3dFuncs = [tictactoeinit, matchingInit, ballInit];
 const game2dArray = ["#snake", "#swarm"];
 const game2dFuncs = [snakeInit, swarmInit];
 
-// for(let i=0; i<game3dArray.length; i++){
-//     document.querySelector(game3dArray[i]).addEventListener('click', () =>{
-//         document.querySelector('#home').hidden = true;
-//         document.querySelector('#artdiv').hidden = true;
-//         let gameEls= document.querySelector('#gamediv').children;
-//         for (let i=0; i<gameEls.length; i++){
-//             gameEls[i].innerHTML = '';
-//         }
-//         game3dFuncs[i];
-//         document.querySelector('#widget-menu').hidden = true;
-//         document.querySelector('#gamediv').hidden = false;
-//     })
-// }
-// function testFunc(){
-//     game2dFuncs[0];
-//     document.querySelector('#widget-menu').hidden = true;
-//     document.querySelector('#gamediv').hidden = false;
-// }
 for(let i=0; i<game3dArray.length; i++){
     document.querySelector(game3dArray[i]).addEventListener('click', () => {
         game3dFuncs[i]();
         document.querySelector('#home').hidden = true;
         document.querySelector('#artdiv').hidden = true;
+        document.querySelector('#testDiv').hidden = true;
         document.querySelector('#widget-menu').style.display = "none";
         document.querySelector('#gamediv').hidden = false;
     })
@@ -37,6 +20,7 @@ for(let i=0; i<game2dArray.length; i++){
         game2dFuncs[i]();
         document.querySelector('#home').hidden = true;
         document.querySelector('#artdiv').hidden = true;
+        document.querySelector('#testDiv').hidden = true;
         document.querySelector('#widget-menu').style.display = "none";
         document.querySelector('#gamediv').hidden = false;
     })
@@ -48,10 +32,12 @@ document.querySelector('#select_home').addEventListener('click', () => {
     }
     document.querySelector('#artdiv').hidden = true;//hiding all divs besides home
     document.querySelector('#gamediv').hidden = true;
+    document.querySelector('#testDiv').hidden = true;
     document.querySelector('#home').hidden = false;
 })
 document.querySelector('#select_3d').addEventListener('click', () => {
     document.querySelector('#home').hidden = true;
+    document.querySelector('#testDiv').hidden = true;
     document.querySelector('#artdiv').hidden = true;
     let gameEls= document.querySelector('#gamediv').children;
     for (let i=0; i<gameEls.length; i++){
@@ -68,6 +54,7 @@ document.querySelector('#select_3d').addEventListener('click', () => {
 })
 document.querySelector('#select_2d').addEventListener('click', () => {
     document.querySelector('#home').hidden = true;
+    document.querySelector('#testDiv').hidden = true;
     document.querySelector('#artdiv').hidden = true;
     let gameEls= document.querySelector('#gamediv').children;
     for (let i=0; i<gameEls.length; i++){
@@ -89,5 +76,42 @@ document.querySelector('#art').addEventListener('click', () => {
     }
     document.querySelector('#home').hidden = true;
     document.querySelector('#gamediv').hidden = true;
+    document.querySelector('#testDiv').hidden = true;
     document.querySelector('#artdiv').hidden = false;
 })
+
+//tester button and helper function for displaying
+document.querySelector('#select_test').addEventListener('click', () => {
+    let gameEls= document.querySelector('#gamediv').children;
+    for (let i=0; i<gameEls.length; i++){
+        gameEls[i].innerHTML = '';
+    }
+    document.querySelector('#testDiv').innerText = '';
+    document.querySelector('#artdiv').hidden = true;
+    document.querySelector('#gamediv').hidden = true;
+    document.querySelector('#home').hidden = true;
+    document.querySelector('#testDiv').hidden = false;
+
+    tictactoeinit(true);
+    snakeInit(true);
+    matchingInit(true);
+
+})
+
+let txtOut = [];
+function dbOut(txt, print){
+
+    if(print === true){
+        txtOut.push(txt);
+        let testOut = document.createElement('p');
+        for(let i=0; i<txtOut.length; i++){
+            testOut.innerText = testOut.innerText + txtOut[i];
+        }
+        txtOut = [];
+        document.querySelector('#testDiv').appendChild(testOut);
+    }
+    else{
+        txtOut.push(txt);
+    }
+    
+}

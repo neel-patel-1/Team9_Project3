@@ -301,30 +301,29 @@ const tictactoeinit = (test) => {
     //testing for on-click test
     if(test){
         //test 1
-        console.log("Torus Tic Tac Toe Tests: ");
         function t1(){
-            console.log("Test 1: ");
+            dbOut("Test 1: ");
             game.board = [['.','.','.'],
             ['X','X','.'],
             ['.','.','.']];
             game.row = 1;
             game.col = 1;
             if(checkWin() === true){
-                console.log("FAILED");
+                dbOut("FAILED", true);
             }
             else{
                 game.board[1][2] = 'X';
                 game.col = 2;
                 if(checkWin() === true){
-                    console.log("PASSED");
+                    dbOut("PASSED", true);
                 }
                 else{
-                    console.log("FAILED");
+                    dbOut("FAILED", true);
                 }
             }
         }
         function t2(){
-            console.log("Test 2: ");
+            dbOut("Test 2: ");
             game.board = [['O','.','.'],
             ['X','O','.'],
             ['.','.','.']];
@@ -342,16 +341,16 @@ const tictactoeinit = (test) => {
                 game.row = 2;
                 game.col = 2;
                 if(checkWin() === true){
-                    console.log("PASSED");
+                    dbOut("PASSED", true);
                 }
                 else{
-                    console.log("FAILED");
+                    dbOut("FAILED", true);
                 }
             }
         }
         function t3(){
             let failed = false;
-            console.log("Test 3: ");
+            dbOut("Test 3: ");
             game.board = [['O','O','X'],
             ['.','O','.'],
             ['O','X','X']];
@@ -366,12 +365,13 @@ const tictactoeinit = (test) => {
                 }
             }
             if(failed == false){
-                console.log("PASSED");
+                dbOut("PASSED", true);
             }
             else{
-                console.log("FAILED");
+                dbOut("FAILED", true);
             }
         }
+        dbOut("Torus Tic Tac Toe Tests: ", true);
         t1();
         t2();
         t3();

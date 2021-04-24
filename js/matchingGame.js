@@ -237,7 +237,7 @@ const matchingInit = (test) => {
             let i1 = Math.floor(Math.random()*16);
             let i2 = Math.floor(Math.random()*16);
 
-            
+
             matchMaker.add(scene.children[i1]);
             matchMaker.add(scene.children[i2]);
 
@@ -250,7 +250,7 @@ const matchingInit = (test) => {
         Test 2: Passing two matching tiles to matchmaker will remove them from the scene.
         */
        function popI(i){
-            console.log(`Test 2: Matching pair ${i+1} removes tiles from the scene: `);
+            dbOut(`Test 2: Matching pair ${i+1} removes tiles from the scene: `);
             let olen = scene.children.length;
             let i1 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][0]);
             let i2 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][1]);
@@ -260,11 +260,11 @@ const matchingInit = (test) => {
                 setTimeout(() => {
                     if(scene.children.length === olen-2 || matchMaker.hasWon === true){
                         console.log(scene.children.length);
-                        console.log("PASSED");
+                        dbOut("PASSED", true);
                         resolve(i+1);
                     }
                     else{
-                        console.log("FAILED");
+                        dbOut("FAILED", true);
                         console.log(scene.children.length);
                         resolve(i+1);
                     }
@@ -275,14 +275,17 @@ const matchingInit = (test) => {
         Test 3: Passing all matching tiles to matchmaker correctly will result in a win
         */
         function t3(){
-            console.log(`Test 3: Matching pair removes tiles from the scene: `);
+            dbOut(`Test 3: Matching pair removes tiles from the scene: `);
             if(matchMaker.hasWon === true){
-                console.log(`PASSED`);
+                dbOut(`PASSED`, true);
                 return (Promise.resolve());
+            }
+            else{
+                dbOut('FAILED', true);
             }
         }
         // console.log(colorMap.idColors);
-
+        dbOut("Matching Game Tests: ", true);
         // t1();
         popI(0).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI)
         .then(t3);

@@ -188,31 +188,31 @@ const snakeInit = (test) => {
     if(test){
         /*Test1: check safeMove() function is accurate*/
         function t1(){
-            console.log('Test1: Check if move is safe on move')
+            dbOut('Test1: Check if move is safe on move()');
             game.snakeStack = [[0,0],[0,1],[1,1]];
             if(!game.safeMove(1,1) && game.safeMove(1,2)){
-                console.log('PASSED');
+                dbOut('PASSED', true);
             }
             else{
-                console.log('FAILED');
+                dbOut('FAILED', true);
             }
         }
         /*Test2: Check new food generated for snake on pickup*/
         function t2(){  
-            console.log('Test2: Collectible relocates; snake gets to bottom')
+            dbOut('Test2: Collectible relocates; snake gets to bottom');
             game.newPiece = [1,2];
             // console.log(game.newPiece);
             game.snakeStack = [[0,0],[0,1],[1,1]];
             game.nextDir('s');
             game.move();
             if(game.newPiece[0] !== 1 || game.newPiece[1] !==2){
-                console.log('PASSED');
+                dbOut('PASSED', true);
             }
             else{
-                console.log('FAILED');
+                dbOut('FAILED', true);
                 console.log(game.newPiece);
             }
-            console.log('Test3: Check snake moves to bottom without intervention');
+            dbOut('Test3: Check snake moves to bottom without intervention');
             return new Promise( (resolve, reject) => {
                 setTimeout( () =>{
                     if(game.snakeStack.findIndex((sp) => sp[0] === 1 && sp[1] === 15) >= 0){
@@ -225,13 +225,15 @@ const snakeInit = (test) => {
                 
             });
         }
+
+        dbOut("Snake Tests: ", true);
         t1();
         
         /*Test3: Check snake moves to bottom without intervention*/
         t2().then(() => {
-            console.log('PASSED');
+            dbOut('PASSED', true);
         }).catch(() =>{
-            console.log('FAILED');
+            dbOut('FAILED', true);
         });
         
         
