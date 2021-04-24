@@ -19,6 +19,12 @@ const ballInit = () => {
     renderer.setSize( window.innerWidth*0.75, window.innerHeight*0.75);
     document.getElementById("game").appendChild( renderer.domElement );
 	
+
+	let testButton = document.createElement("input");
+	testButton.setAttribute("type", "button");
+	testButton.setAttribute("value", "One-click Test");
+	document.getElementById("game").appendChild(testButton);
+	
 	
 	//create canvas and context
 	
@@ -105,6 +111,8 @@ const ballInit = () => {
 		}
 	}
 
+	
+
 	function draw(){
 		let h = background.height;
 		let w = background.width;
@@ -151,7 +159,7 @@ const ballInit = () => {
 	//approximate horizontal arc length given phi and dtheta
 	function calcWidth(phi, dtheta){
 		let width = Math.sin(dtheta)*Math.sin(phi);
-		width = width/(Math.sin((2*Math.PI-dtheta)/2));
+		width = width/(Math.sin((2*Math.PI-dtheta)/2));//3/2pi 
 		return width
 	}
 	function calcPos(){
@@ -188,5 +196,107 @@ const ballInit = () => {
 			playerX += 5;
 		}
 	});
+
+	function test(condition){
+		if(condition){
+			console.log("PASSED");
+		}else{
+			console.log("FAILED");
+		}
+	}
+
+	testButton.onclick = function() {
+		//test
+		/*	
+		calcWidth 1 when dtheta ==0, less when phi is pi than when phi is pi/2
+		collision() - collide when aballX = 0, aplayerX = 0, collide when aplayerX = 8, collide when aplayerX = 19, no collide when aallX = 21 aplayerX = 0, 
+				slope is 10 in first case, 2 in second 0.3 in thrid, 	
+		
+		
+		*/
+		
+		console.log("RUNNING TESTS");
+		console.log("calcWidth() tests -- ");
+		console.log("when passed dtheta = 0, and phi = pi/2, 0 is returned - ");
+		test(calcWidth(0,Math.PI/2)==0);
+		console.log("when passed dtheta = 0, and phi = 0, 0 is returned - ");
+		test(calcWidth(0,0)==0);
+		console.log("when passed dtheta = pi/2, and phi = pi/2, sqrt(2) is returned - ");
+		test(Math.round(calcWidth(Math.PI/2,Math.PI/2)*100)==Math.round(Math.sqrt(2)*100));
+
+
+		console.log("collision() tests -- ");
+		console.log("when ballX is 0 and playerX is 0, a collision should occur - ");
+		test(testCollision(0,0)[2]==true);
+		console.log("when ballX is 0 and playerX is 0, the resulting slope is 10 - ");
+		test(testCollision(0,0)[0]==10);
+		
+		console.log("when ballX is 8 and playerX is 0, a collision should occur - ");
+		test(testCollision(8,0)[2]==true);
+		console.log("when ballX is 8 and playerX is 0, the resulting slope is 2 - ");
+		test(testCollision(8,0)[0]==2);
+
+		console.log("when ballX is 19 and playerX is 0, a collision should occur - ");
+		test(testCollision(19,0)[2]==true);
+		console.log("when ballX is 19 and playerX is 0, the resulting slope is 0.3 - ");
+		test(testCollision(19,0)[0]==0.3);
+
+		console.log("when ballX is 21 and playerX is 0, a collision should not occur - ");
+		test(testCollision(21,0)[2]==false);
+
+		console.log("calcPos() tests -- ");
+		console.log("if passed ballX = 0, ballY = 0, and slope = 0, ballY should be returned as 150 - ");
+		let pos1 = testCalcPos(0,0,0,0);
+		test(Math.abs(pos1[1]-150)<0.1);
+	}
+	function testCollision(aballX, aplayerX){
+		let coll = false;
+		let offset = 0;
+		let h = background.height;
+		let w = background.width;
+		if(Math.abs(aballX-aplayerX) < 20){
+			coll = true;
+			let dfC = Math.abs(aballX-aplayerX)/20;//distance from center of paddle	
+			switch(Math.floor(dfC*3)) {
+  				case 0:
+					s = 10;
+					offset += (Math.PI)+(0.06);
+					break;
+				case 1:
+					s = 2;
+					offset += (Math.PI)+(0.1);
+					break;
+				case 2:
+					s = 0.3;
+					offset += (Math.PI)+(0.7);
+					break;
+  				default:
+			} 		
+		}
+		return [s, offset, coll];
+	}
+	function testCalcPos(aballX, aballY, s, aoffset){
+		let h = background.height;
+		let w = background.width;
+		let theta = aballX*(2*3.1415/w) + aoffset;	
+		let phi = Math.PI*aballY/h;
+		
+		
+
+		aballY = (Math.atan(1/(s*Math.sin(theta))));
+		aballY = ((aballY%Math.PI)+Math.PI)%Math.PI;
+		aballY *= (h/3.1415);
+		
+		let mag = Math.cos(theta)*s/(s*s*Math.sin(theta)*Math.sin(theta)+1);
+		mag = 1 + (mag*mag);
+		mag = Math.sqrt(mag);
+
+
+		aballX += v/(mag*calcWidth(phi, dtheta));
+	
+		aballX = (aballX%w+w)%w;
+		return [aballX, aballY];
+		
+	}
 }
 
