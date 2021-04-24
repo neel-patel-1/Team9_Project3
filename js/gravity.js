@@ -14,6 +14,11 @@ const gravityInit = () => {
     slider1.setAttribute("type", "range");
     document.getElementById("game").appendChild(slider1);
 	
+	let testButton = document.createElement("input");
+	testButton.setAttribute("type", "button");
+	testButton.setAttribute("value", "One-click Test");
+	document.getElementById("game").appendChild(testButton);
+	
 	
     //initialize camera, scene, renderer, add Orbital Controls
   
@@ -23,9 +28,9 @@ const gravityInit = () => {
 
     const scene =  new THREE.Scene();
 
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth*0.75, window.innerHeight*0.75);
-    document.getElementById("game").appendChild( renderer.domElement );
+ 	let renderer;
+	let light;
+	let controls;
 	
 	let grav_mag = 0.01;
 	let air_resist = 0.95;
@@ -36,22 +41,18 @@ const gravityInit = () => {
 	let balls = [];
 	let veloc = [];//array of velocities for balls
 
-	const geometry = new THREE.SphereGeometry(radius);
-	const material = new THREE.MeshLambertMaterial( {color: 0xf20066} );
-	const ball = new THREE.Mesh( geometry, material );
-	scene.add( ball );
-	balls.push(ball);
-	numBalls ++;
-	veloc.push([0,0,0]);
 	
 
 
 	function sceneInit(){
-	
-		const light = new THREE.HemisphereLight( 0xffffff, 0x130820, 1 );
+		renderer = new THREE.WebGLRenderer();
+    		renderer.setSize( window.innerWidth*0.75, window.innerHeight*0.75);
+    		document.getElementById("game").appendChild( renderer.domElement );
+
+		light = new THREE.HemisphereLight( 0xffffff, 0x130820, 1 );
 		scene.add( light );
 
-		const controls = new THREE.OrbitControls( camera, renderer.domElement );
+		controls = new THREE.OrbitControls( camera, renderer.domElement );
    		controls.minDistance = 3;
 	}
 
@@ -93,22 +94,6 @@ const gravityInit = () => {
 		];
 		return dis;
 	}
-
-	function getReflectVector(dif, incoming){//normal vector and incoming velocity vector
-		//project incoming vector onto normal vector, update normal to new size
-		//subtract incoming from normal
-		//add the difference to normal
-		let new_vel = [0,0,0];
-		let normal = project(incoming, dif);
-		let dis_to_normal = subtractVectors(normal, incoming);
-		new_vel[0] = [
-			dis_to_normal[0]+normal[0],
-			dis_to_normal[1]+normal[1],
-			dis_to_normal[2]+normal[2],
-		];
-		return new_vel;//returns new velocity vector
-		
-	}
 	
 	function dot(vec1, vec2){
 		let dot = (vec1[0]*vec2[0]) + (vec1[1]*vec2[1]) + (vec1[2]*vec2[2]);
@@ -134,22 +119,23 @@ const gravityInit = () => {
 
 	
 	function updatePositions(){
+		let total_force = [];
 		for (let i = 0; i < numBalls; i++) {
-			let total_force = [0,0,0];
+			total_force.push([0,0,0]);
 			let collision = -1;
 			for(let j = 0; j < numBalls; j++){
 				if(i!=j){
 					let dis = subtractPositions(balls[j].position, balls[i].position);
-					let m_dis = getMagnitude(dis); //square of distance
+					let m_dis = getMagnitude(dis);
 
-					let mag = 1;///(m_dis); //magnitude of force: 1/(distance^2)
+					let mag = 1/(m_dis); //magnitude of force: 1/(distance^2)
 					if(mag> 0.5){
 						mag = 0.5;
 					}
 					let force = [mag*dis[0]/m_dis, mag*dis[1]/m_dis, mag*dis[2]/m_dis]; //normalized then multiplied by magnitude of force
-					total_force[0] += force[0]*grav_mag;
-					total_force[1] += force[1]*grav_mag;
-					total_force[2] += force[2]*grav_mag;
+					total_force[i][0] += force[0]*grav_mag;
+					total_force[i][1] += force[1]*grav_mag;
+					total_force[i][2] += force[2]*grav_mag;
 					
 					//check for collisions
 					if(m_dis < radius*2){ 
@@ -158,35 +144,33 @@ const gravityInit = () => {
 				}
 			}
 			
-			if(i!=0){ //don't update position of first ball
-				if(collision>=0){
-
-					let dis = subtractPositions(balls[collision].position, balls[i].position);
-					let mag_force = getMagnitude(total_force);
-					let norm = scalar(0.05/getMagnitude(dis), dis);
-					
-					total_force[0] -= norm[0];
-					total_force[1] -= norm[1];
-					total_force[2] -= norm[2];
-					
-					let mag_force2 = getMagnitude(total_force);
-					
-					total_force = scalar(mag_force/mag_force2, total_force);
-				}
-				updateVelPos(i, total_force);
-
+			
+			if(collision>=0){
+				let dis = subtractPositions(balls[collision].position, balls[i].position);
+				let mag_force = getMagnitude(total_force);
+				let norm = scalar(0.2/getMagnitude(dis), dis);
+				
+				total_force[i][0] -= norm[0];
+				total_force[i][1] -= norm[1];
+				total_force[i][2] -= norm[2];
+				
 			}
+			updateVel(i, total_force[i]);
+		}
+		for (let i = 0; i < numBalls; i++) {
+			updatePos(i);
 		}
 		
 	}
 
-	function updateVelPos(i, total_force){
+	function updateVel(i, total_force){
 		veloc[i][0] += total_force[0];	//assume mass is 1, so treat force as acceleration
 		veloc[i][1] += total_force[1];
 		veloc[i][2] += total_force[2];
 		
 		veloc[i] = scalar(air_resist, veloc[i]);
-
+	}
+	function updatePos(i){
 		balls[i].position.x += veloc[i][0];
 		balls[i].position.y += veloc[i][1];
 		balls[i].position.z += veloc[i][2];
@@ -211,7 +195,89 @@ const gravityInit = () => {
 	slider1.oninput = function() {
   		 console.log(this.value);
 		 grav_mag = this.value/800;
+	}
+
+
+
+	//TEST FUNCTIONS
+	testButton.onclick = function() {
+  		 console.log("RUNNING TESTS");
+		//test getmagnitude
+		//test subtractpositions
+		//test subtractvectors
+		//test dot product
+		//test scalar
+
+		//clear scene
+		scene.remove.apply(scene, scene.children);
+		
+		console.log("addBall() Tests --");
+		console.log("numBalls increases after one addBall() call - ");
+		addBall();
+		test(numBalls==1);
+
+		console.log("numBalls does not increase after 5 addBall()s have been called - ");
+		addBall();
+		addBall();
+		addBall();
+		addBall();
+		let temp_num_balls = numBalls;
+		addBall();
+		test(numBalls==temp_num_balls);
+
+		console.log("getMagnitude(vector) Tests -- ");
+		console.log("returns 0 when [0,0,0] is passed - ");
+		test(getMagnitude([0,0,0])==0);
+		
+		console.log("returns 1 when [1,0,0] is passed - ");
+		test(getMagnitude([1,0,0])==1);
+		console.log("returns 1 when [0,1,0] is passed - ");
+		test(getMagnitude([0,1,0])==1);
+		console.log("returns 1 when [0,0,1] is passed - ");
+		test(getMagnitude([0,0,1])==1);
+		
+		
+
+		console.log("subtractPositions() Tests -- ");
+		console.log("returns 0 when passed the same position object twice - ");
+		let pos1 = {x: 2, y: 3, z: 3};
+		let result = subtractPositions(pos1, pos1);
+		test(result[0] == 0 && result[1] == 0 && result[2] == 0);
+	
+		console.log("subtractVectors() Tests -- ");
+		console.log("returns 0 when passed the same vector twice - ");
+		let v = [2, 3, 4];
+		result = subtractVectors(v,v);
+		test(result[0] == 0 && result[1] == 0 && result[2] == 0);
+
+
+		console.log("dotProduct() Tests -- ");
+		console.log("returns 0 when passed [0,0,1] and [0,1,0] - ");
+		test(dot([0,0,1], [0,1,0])==0);
+		console.log("returns 1 when passed [0,0,1] and [0,0,1] - ");
+		test(dot([0,0,1], [0,0,1])==1);
+
+	
+		console.log("scalar() Tests -- ");
+		console.log("returns [0,0,0] when passed 0 and [5,5,5] - ");
+		result = scalar(0, [5,5,5]);
+		test(result[0] == 0 && result[1] == 0 && result[2] == 0);
+		
+		console.log("returns [5,5,5] when passed 1 and [5,5,5]");
+		result = scalar(1, [5,5,5]);
+		test(result[0] == 5 && result[1] == 5 && result[2] == 5);
+		
+		
+		window.location.reload()
 	} 
+	
+	function test(condition){
+		if(condition){
+			console.log("PASSED");
+		}else{
+			console.log("FAILED");
+		}
+	}
 	
 }
 
