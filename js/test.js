@@ -188,31 +188,31 @@ const snakeInit = (test) => {
     if(test){
         /*Test1: check safeMove() function is accurate*/
         function t1(){
-            dbOut('Test1: Check if move is safe on move()');
+            dbOut('Test1: Check if move is safe on move(): ', true, '#snakeOut');
             game.snakeStack = [[0,0],[0,1],[1,1]];
             if(!game.safeMove(1,1) && game.safeMove(1,2)){
-                dbOut('PASSED', true);
+                dbOut('PASSED', true, '#snakeOut');
             }
             else{
-                dbOut('FAILED', true);
+                dbOut('FAILED', true, '#snakeOut');
             }
         }
         /*Test2: Check new food generated for snake on pickup*/
         function t2(){  
-            dbOut('Test2: Collectible relocates; snake gets to bottom');
+            dbOut('Test2: Collectible relocates; snake gets to bottom: ',true, '#snakeOut');
             game.newPiece = [1,2];
             // console.log(game.newPiece);
             game.snakeStack = [[0,0],[0,1],[1,1]];
             game.nextDir('s');
             game.move();
             if(game.newPiece[0] !== 1 || game.newPiece[1] !==2){
-                dbOut('PASSED', true);
+                dbOut('PASSED', true, '#snakeOut');
             }
             else{
-                dbOut('FAILED', true);
+                dbOut('FAILED', true, '#snakeOut');
                 console.log(game.newPiece);
             }
-            dbOut('Test3: Check snake moves to bottom without intervention');
+            dbOut('Test3: Check snake moves to bottom without intervention: ', true, '#snakeOut');
             return new Promise( (resolve, reject) => {
                 setTimeout( () =>{
                     if(game.snakeStack.findIndex((sp) => sp[0] === 1 && sp[1] === 15) >= 0){
@@ -226,14 +226,14 @@ const snakeInit = (test) => {
             });
         }
 
-        dbOut("Snake Tests: ", true);
+        dbOut("Snake Tests: ", true, '#snakeOut');
         t1();
         
         /*Test3: Check snake moves to bottom without intervention*/
         t2().then(() => {
-            dbOut('PASSED', true);
+            dbOut('PASSED', true, '#snakeOut');
         }).catch(() =>{
-            dbOut('FAILED', true);
+            dbOut('FAILED', true, '#snakeOut');
         });
         
         

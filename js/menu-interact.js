@@ -99,19 +99,25 @@ document.querySelector('#select_test').addEventListener('click', () => {
 })
 
 let txtOut = [];
-function dbOut(txt, print){
+function dbOut(txt, print, whichDiv){
 
-    if(print === true){
+    if(document.querySelector(whichDiv) === null){//need new div?
+        let newDiv = document.createElement('div');
+        newDiv.id = whichDiv.slice(1);
+        document.querySelector('#testDiv').appendChild(newDiv);
+    }
+    if(print === true){//ready for output
         txtOut.push(txt);
         let testOut = document.createElement('p');
         for(let i=0; i<txtOut.length; i++){
             testOut.innerText = testOut.innerText + txtOut[i];
         }
         txtOut = [];
-        document.querySelector('#testDiv').appendChild(testOut);
-    }
+        document.querySelector(whichDiv).appendChild(testOut);
+    }//not ready for output
     else{
         txtOut.push(txt);
+        
     }
     
 }

@@ -302,28 +302,28 @@ const tictactoeinit = (test) => {
     if(test){
         //test 1
         function t1(){
-            dbOut("Test 1: ");
+            dbOut("Test 1: ", false, "#tttOutput");
             game.board = [['.','.','.'],
             ['X','X','.'],
             ['.','.','.']];
             game.row = 1;
             game.col = 1;
             if(checkWin() === true){
-                dbOut("FAILED", true);
+                dbOut("FAILED", true, "#tttOutput");
             }
             else{
                 game.board[1][2] = 'X';
                 game.col = 2;
                 if(checkWin() === true){
-                    dbOut("PASSED", true);
+                    dbOut("PASSED", true, "#tttOutput");
                 }
                 else{
-                    dbOut("FAILED", true);
+                    dbOut("FAILED", true, "#tttOutput");
                 }
             }
         }
         function t2(){
-            dbOut("Test 2: ");
+            dbOut("Test 2: ", false, "#tttOutput");
             game.board = [['O','.','.'],
             ['X','O','.'],
             ['.','.','.']];
@@ -331,7 +331,7 @@ const tictactoeinit = (test) => {
             game.col = 0;
             game.next = 'O';
             if(checkWin() === true){
-                console.log("FAILED");
+                dbOut("FAILED", false,"#tttOutput");
             }
             else{
                 game.next = 'X';
@@ -341,16 +341,16 @@ const tictactoeinit = (test) => {
                 game.row = 2;
                 game.col = 2;
                 if(checkWin() === true){
-                    dbOut("PASSED", true);
+                    dbOut("PASSED", true, "#tttOutput");
                 }
                 else{
-                    dbOut("FAILED", true);
+                    dbOut("FAILED", true, "#tttOutput");
                 }
             }
         }
         function t3(){
             let failed = false;
-            dbOut("Test 3: ");
+            dbOut("Test 3: ", false,"#tttOutput");
             game.board = [['O','O','X'],
             ['.','O','.'],
             ['O','X','X']];
@@ -365,13 +365,13 @@ const tictactoeinit = (test) => {
                 }
             }
             if(failed == false){
-                dbOut("PASSED", true);
+                dbOut("PASSED", true, "#tttOutput");
             }
             else{
-                dbOut("FAILED", true);
+                dbOut("FAILED", true, "#tttOutput");
             }
         }
-        dbOut("Torus Tic Tac Toe Tests: ", true);
+        dbOut("Torus Tic Tac Toe Tests: ", true, "#tttOutput");
         t1();
         t2();
         t3();

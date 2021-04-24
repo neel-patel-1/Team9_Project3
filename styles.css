@@ -5,9 +5,9 @@
 }
 body, html{
     /*background: linear-gradient(#e0df79, #9198e5);*/
-    background: linear-gradient(360deg, rgb(50, 50, 54), rgb(117, 110, 111) ) no-repeat;
-    background-size:cover;
-    height: 100%;
+    /* background: linear-gradient(360deg, rgb(50, 50, 54), rgb(117, 110, 111) ) no-repeat; */
+    /* height: 100% auto ; */
+    background-color: rgb(51, 50, 50);
     box-sizing:border-box;
     font-family:sans-serif;
 }
