@@ -230,30 +230,27 @@ const matchingInit = (test) => {
     init();
     
     if(test){
-        /*
-        Test 1: Passing two matching tiles to matchmaker will remove them from the scene.
-        */
+        
 
         function t1(){
             console.log('Test 1: Attempting mismatch does not remove tiles:');
             let i1 = Math.floor(Math.random()*16);
             let i2 = Math.floor(Math.random()*16);
+
             
-            //check : colorMap.idColors.find(scene.children[i1].uuid)
             matchMaker.add(scene.children[i1]);
             matchMaker.add(scene.children[i2]);
-            if(scene.children.length == numTiles){
-                console.log('PASSED')
-                return (Promise.resolve());
-            }
-            else{
-                console.log('FAILED');
-                return (Promise.resolve());
-            }
+
+            //         if(scene.children.length === numTiles){
+            //             console.log('PASSED')
+            //             resolve(0);
+            //         }
         }
-       console.log('Test 2:');
+        /*
+        Test 2: Passing two matching tiles to matchmaker will remove them from the scene.
+        */
        function popI(i){
-            console.log(`Matching pair ${i+1} removes tiles from the scene: `);
+            console.log(`Test 2: Matching pair ${i+1} removes tiles from the scene: `);
             let olen = scene.children.length;
             let i1 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][0]);
             let i2 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][1]);
@@ -261,32 +258,37 @@ const matchingInit = (test) => {
             matchMaker.add(scene.children[i2]);
             return new Promise((resolve) => {
                 setTimeout(() => {
-                    if(scene.children.length === olen-2){
-                        // console.log(scene.children.length);
+                    if(scene.children.length === olen-2 || matchMaker.hasWon === true){
+                        console.log(scene.children.length);
                         console.log("PASSED");
                         resolve(i+1);
                     }
                     else{
                         console.log("FAILED");
-                        // console.log(scene.children.length);
+                        console.log(scene.children.length);
                         resolve(i+1);
                     }
                 }, 1050);  
             })
         }
         /*
-        Test 2: Passing all matching tiles to matchmaker correctly will result in a win
+        Test 3: Passing all matching tiles to matchmaker correctly will result in a win
         */
-        function t2(){
+        function t3(){
             console.log(`Test 3: Matching pair removes tiles from the scene: `);
             if(matchMaker.hasWon === true){
                 console.log(`PASSED`);
                 return (Promise.resolve());
             }
         }
+        // console.log(colorMap.idColors);
 
+        // t1();
         popI(0).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI)
-        .then(t2);
+        .then(t3);
+
+        // t1().then(popI).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI)
+        // .then(t3);
 
         
 
