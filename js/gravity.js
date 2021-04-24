@@ -14,9 +14,6 @@ const gravityInit = () => {
     slider1.setAttribute("type", "range");
     document.getElementById("game").appendChild(slider1);
 	
-    let slider2 = document.createElement("input");
-    slider2.setAttribute("type", "range");
-    document.getElementById("game").appendChild(slider2);
 	
     //initialize camera, scene, renderer, add Orbital Controls
   
@@ -216,10 +213,5 @@ const gravityInit = () => {
 		 grav_mag = this.value/800;
 	} 
 	
-	slider2.oninput = function() {
-  		 console.log(this.value);
-		 air_resist = 1-this.value/800;
-	} 
-
 }
 
