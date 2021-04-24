@@ -7,7 +7,7 @@ const gravityInit = () => {
 	document.querySelector('#instructions').textContent = ' ';
 	
     let instr = document.createElement('p');
-    instr.textContent = 'Press A to add a ball';
+    instr.textContent = 'Press A to add a ball, use slider to change gravity strength';
     document.querySelector('#instructions').appendChild(instr);
 	
     let slider1 = document.createElement("input");
