@@ -1,5 +1,5 @@
 //possible spin on snake??
-const snakeInit = () => {
+const snakeInit = (test) => {
     //clear child elements of game div
     document.querySelector('#game').textContent = ' ';
     document.querySelector('#instructions').textContent = ' ';
@@ -22,30 +22,12 @@ const snakeInit = () => {
     const ctx = canvas.getContext('2d');
     ctx.fillRect(0,0,canvas.width, canvas.height);
     let game = {
-        // snakeStack : [[8,8]],
         snakeStack : [[6,8],[7,8],[8,8]],
         newPiece : [Math.floor(Math.random()*7), Math.floor(Math.random()*7)],
         h: canvas.height/17,
         w : canvas.width/17,
-        //dir: ['\0', '\0'],
         dir: ['d', '\0'],
         begun: false,
-        /*copy move code with modulo arithmetic for new pos??
-        special : function(){
-            //use push + shift to add new head, cut off old tail, how to add new piece??
-            tail -> XXXO <-head  array: [X,X,X,O]  ,  [X,X,X,O] pu , new piece V shift:
-            if(this.snakeStack[this.snakeStack.length-1][0] === new.x && this.snakeStack[this.snakeStack.length-1][1] === new.y){
-            //don't remove first element of array on next move
-            //gen new new piece randomly
-            }
-            context.beginPath();
-            context.arc( i*(view.width/7)+(view.width/14), 
-                + (5-j)*((view.height)/6) + (view.height/12), 
-            (view.width/14) - (context.lineWidth), 0, 2 * Math.PI);
-            context.fillStyle = '#' + Math.floor(cseed).toString(16);
-            context.fill();
-        }
-        */
         genNew : function(){
             let tx = Math.floor(Math.random()*17);
             let ty = Math.floor(Math.random()*17);
@@ -135,13 +117,6 @@ const snakeInit = () => {
                 this.gameOver();
             }
         },
-        /*
-        trusting the user's new direction too early, must validate user's direction is not parallel to oldDir
-        dir : [old, new];
-        if(old == 'd' and uChoice == 'a') we have a problem
-        //when can we trust that the user has finished fucking with dir: better be done once snake is ready to move
-        //once snake is ready to move, change dir[0] to dir[1] iff dir[1] is not parallel to dir[0]
-        */  
         nextDir : function(newDir){
             if( (newDir !== this.dir[1]) && 
                 ( (newDir === 'd' && this.dir[0] !== 'a') ||
@@ -179,8 +154,8 @@ const snakeInit = () => {
         safeMove: function(x, y){
             for(let i=1; i<this.snakeStack.length; i++){
                 if(x === this.snakeStack[i][0] && y === this.snakeStack[i][1]){
-                    console.log(this.snakeStack[i]);
-                    console.log(this.snakeStack);
+                    // console.log(this.snakeStack[i]);
+                    // console.log(this.snakeStack);
                     this.draw();
                     return false;
                 }
@@ -209,5 +184,59 @@ const snakeInit = () => {
         game.draw();
     }
     game.draw();
+
+    if(test){
+        /*Test1: check safeMove() function is accurate*/
+        function t1(){
+            dbOut('Test1: Check if move is safe on move(): ', true, '#snakeOut');
+            game.snakeStack = [[0,0],[0,1],[1,1]];
+            if(!game.safeMove(1,1) && game.safeMove(1,2)){
+                dbOut('PASSED', true, '#snakeOut');
+            }
+            else{
+                dbOut('FAILED', true, '#snakeOut');
+            }
+        }
+        /*Test2: Check new food generated for snake on pickup*/
+        function t2(){  
+            dbOut('Test2: Collectible relocates; snake gets to bottom: ',true, '#snakeOut');
+            game.newPiece = [1,2];
+            // console.log(game.newPiece);
+            game.snakeStack = [[0,0],[0,1],[1,1]];
+            game.nextDir('s');
+            game.move();
+            if(game.newPiece[0] !== 1 || game.newPiece[1] !==2){
+                dbOut('PASSED', true, '#snakeOut');
+            }
+            else{
+                dbOut('FAILED', true, '#snakeOut');
+                console.log(game.newPiece);
+            }
+            dbOut('Test3: Check snake moves to bottom without intervention: ', true, '#snakeOut');
+            return new Promise( (resolve, reject) => {
+                setTimeout( () =>{
+                    if(game.snakeStack.findIndex((sp) => sp[0] === 1 && sp[1] === 15) >= 0){
+                        resolve();
+                    }
+                    else{
+                        reject();
+                    }
+                }, 3500);
+                
+            });
+        }
+
+        dbOut("Snake Tests: ", true, '#snakeOut');
+        t1();
+        
+        /*Test3: Check snake moves to bottom without intervention*/
+        t2().then(() => {
+            dbOut('PASSED', true, '#snakeOut');
+        }).catch(() =>{
+            dbOut('FAILED', true, '#snakeOut');
+        });
+        
+        
+    }
 }
 

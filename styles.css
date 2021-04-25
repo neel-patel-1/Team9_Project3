@@ -5,9 +5,9 @@
 }
 body, html{
     /*background: linear-gradient(#e0df79, #9198e5);*/
-    background: linear-gradient(360deg, rgb(50, 50, 54), rgb(117, 110, 111) ) no-repeat;
-    background-size:cover;
-    height: 100%;
+    /* background: linear-gradient(360deg, rgb(50, 50, 54), rgb(117, 110, 111) ) no-repeat; */
+    /* height: 100% auto ; */
+    background-color: rgb(51, 50, 50);
     box-sizing:border-box;
     font-family:sans-serif;
 }
@@ -82,9 +82,6 @@ body, html{
     background: #ccc; 
 }
 
-/* canvas {
-    
-} */
 
 .toRead{
     margin-top: 105px;
@@ -99,3 +96,21 @@ body, html{
 #home{
     margin-top: 20%;
 }
+
+/*styles for test button and div*/
+#select_test{
+    color: #ee603d;
+}
+#testDiv{
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 23px;
+    letter-spacing: 2px;
+    word-spacing: 2px;
+    color: #FF7C37;
+    font-weight: 700;
+    text-decoration: none;
+    font-style: italic;
+    font-variant: small-caps;
+    text-transform: none;
+}
+

@@ -21,3 +21,6 @@
 
 4/23: Griffin -> Game runs slowly
     - removed second canvas element for background
+
+4/24: Griffin -> collisions in gravity not symmetrical
+    - moved updating of positions outside of loop over objects

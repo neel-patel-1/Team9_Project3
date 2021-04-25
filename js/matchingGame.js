@@ -1,4 +1,4 @@
-const matchingInit = () => {
+const matchingInit = (test) => {
     //clear child elements of game div
     document.querySelector('#game').textContent = ' ';
     document.querySelector('#instructions').textContent = ' ';
@@ -229,7 +229,73 @@ const matchingInit = () => {
 
     init();
     
-      
+    if(test){
+        
+
+        function t1(){
+            console.log('Test 1: Attempting mismatch does not remove tiles:',true, '#matchOut');
+            let i1 = Math.floor(Math.random()*16);
+            let i2 = Math.floor(Math.random()*16);
+
+
+            matchMaker.add(scene.children[i1]);
+            matchMaker.add(scene.children[i2]);
+
+            //         if(scene.children.length === numTiles){
+            //             console.log('PASSED')
+            //             resolve(0);
+            //         }
+        }
+        /*
+        Test 2: Passing two matching tiles to matchmaker will remove them from the scene.
+        */
+       function popI(i){
+            dbOut(`Test 2: Matching pair ${i+1} removes tiles from the scene: `,true, '#matchOut');
+            let olen = scene.children.length;
+            let i1 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][0]);
+            let i2 = scene.children.findIndex( (tile) => tile.uuid === colorMap.idColors[i][1]);
+            matchMaker.add(scene.children[i1]);
+            matchMaker.add(scene.children[i2]);
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    if(scene.children.length === olen-2 || matchMaker.hasWon === true){
+                        console.log(scene.children.length);
+                        dbOut("PASSED", true, '#matchOut');
+                        resolve(i+1);
+                    }
+                    else{
+                        dbOut("FAILED", true, '#matchOut');
+                        console.log(scene.children.length);
+                        resolve(i+1);
+                    }
+                }, 1050);  
+            })
+        }
+        /*
+        Test 3: Passing all matching tiles to matchmaker correctly will result in a win
+        */
+        function t3(){
+            dbOut(`Test 3: Matching pair removes tiles from the scene: `,true, '#matchOut');
+            if(matchMaker.hasWon === true){
+                dbOut(`PASSED`, true, '#matchOut');
+                return (Promise.resolve());
+            }
+            else{
+                dbOut('FAILED', true, '#matchOut');
+            }
+        }
+        // console.log(colorMap.idColors);
+        dbOut("Matching Game Tests: ", true, '#matchOut');
+        // t1();
+        popI(0).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI)
+        .then(t3);
+
+        // t1().then(popI).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI).then(popI)
+        // .then(t3);
+
+        
+
+    }
 
     
 
