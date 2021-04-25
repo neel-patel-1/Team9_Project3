@@ -1,5 +1,5 @@
 //add event listener for ball button
-const ballInit = () => {
+const ballInit = (testing) => {
     //clear child elements of game div
 	
 
@@ -18,12 +18,15 @@ const ballInit = () => {
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth*0.75, window.innerHeight*0.75);
     document.getElementById("game").appendChild( renderer.domElement );
-	
+	document.querySelector('canvas').style.position = 'absolute';
+	document.querySelector('canvas').style.margin = 'auto';
+	document.querySelector('canvas').style.left = '0';
+	document.querySelector('canvas').style.right = '0';
 
-	let testButton = document.createElement("input");
-	testButton.setAttribute("type", "button");
-	testButton.setAttribute("value", "One-click Test");
-	document.getElementById("game").appendChild(testButton);
+	// let testButton = document.createElement("input");
+	// testButton.setAttribute("type", "button");
+	// testButton.setAttribute("value", "One-click Test");
+	// document.getElementById("game").appendChild(testButton);
 	
 	
 	//create canvas and context
@@ -185,7 +188,9 @@ const ballInit = () => {
 		
 	}
 	animate();
-	
+	if(testing){
+		runTests();
+	}
 		
 
 	window.addEventListener('keydown', function(event) {
@@ -199,13 +204,13 @@ const ballInit = () => {
 
 	function test(condition){
 		if(condition){
-			console.log("PASSED");
+			dbOut("PASSED", true, '#ballOut');
 		}else{
-			console.log("FAILED");
+			dbOut("FAILED", true, '#ballOut');
 		}
 	}
 
-	testButton.onclick = function() {
+	function runTests() {
 		//test
 		/*	
 		calcWidth 1 when dtheta ==0, less when phi is pi than when phi is pi/2
@@ -215,37 +220,37 @@ const ballInit = () => {
 		
 		*/
 		
-		console.log("RUNNING TESTS");
-		console.log("calcWidth() tests -- ");
-		console.log("when passed dtheta = 0, and phi = pi/2, 0 is returned - ");
+		dbOut("Ball Tests: ", true, '#ballOut');
+		dbOut("calcWidth() tests -- ", false, '#ballOut');
+		dbOut("when passed dtheta = 0, and phi = pi/2, 0 is returned - ", false, '#ballOut');
 		test(calcWidth(0,Math.PI/2)==0);
-		console.log("when passed dtheta = 0, and phi = 0, 0 is returned - ");
+		dbOut("when passed dtheta = 0, and phi = 0, 0 is returned - ", false, '#ballOut');
 		test(calcWidth(0,0)==0);
-		console.log("when passed dtheta = pi/2, and phi = pi/2, sqrt(2) is returned - ");
+		dbOut("when passed dtheta = pi/2, and phi = pi/2, sqrt(2) is returned - ", false, '#ballOut');
 		test(Math.round(calcWidth(Math.PI/2,Math.PI/2)*100)==Math.round(Math.sqrt(2)*100));
 
 
-		console.log("collision() tests -- ");
-		console.log("when ballX is 0 and playerX is 0, a collision should occur - ");
+		dbOut("collision() tests -- ", false, '#ballOut');
+		dbOut("when ballX is 0 and playerX is 0, a collision should occur - ", false, '#ballOut');
 		test(testCollision(0,0)[2]==true);
-		console.log("when ballX is 0 and playerX is 0, the resulting slope is 10 - ");
+		dbOut("when ballX is 0 and playerX is 0, the resulting slope is 10 - ", false, '#ballOut');
 		test(testCollision(0,0)[0]==10);
 		
-		console.log("when ballX is 8 and playerX is 0, a collision should occur - ");
+		dbOut("when ballX is 8 and playerX is 0, a collision should occur - ", false, '#ballOut');
 		test(testCollision(8,0)[2]==true);
-		console.log("when ballX is 8 and playerX is 0, the resulting slope is 2 - ");
+		dbOut("when ballX is 8 and playerX is 0, the resulting slope is 2 - ", false, '#ballOut');
 		test(testCollision(8,0)[0]==2);
 
-		console.log("when ballX is 19 and playerX is 0, a collision should occur - ");
+		dbOut("when ballX is 19 and playerX is 0, a collision should occur - ", false, '#ballOut');
 		test(testCollision(19,0)[2]==true);
-		console.log("when ballX is 19 and playerX is 0, the resulting slope is 0.3 - ");
+		dbOut("when ballX is 19 and playerX is 0, the resulting slope is 0.3 - ", false, '#ballOut');
 		test(testCollision(19,0)[0]==0.3);
 
-		console.log("when ballX is 21 and playerX is 0, a collision should not occur - ");
+		dbOut("when ballX is 21 and playerX is 0, a collision should not occur - ", false, '#ballOut');
 		test(testCollision(21,0)[2]==false);
 
-		console.log("calcPos() tests -- ");
-		console.log("if passed ballX = 0, ballY = 0, and slope = 0, ballY should be returned as 150 - ");
+		dbOut("calcPos() tests -- ", false, '#ballOut');
+		dbOut("if passed ballX = 0, ballY = 0, and slope = 0, ballY should be returned as 150 - ", false, '#ballOut');
 		let pos1 = testCalcPos(0,0,0,0);
 		test(Math.abs(pos1[1]-150)<0.1);
 	}

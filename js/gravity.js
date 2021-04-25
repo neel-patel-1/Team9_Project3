@@ -11,6 +11,12 @@ const gravityInit = (testOutput) => {
     document.querySelector('#instructions').appendChild(instr);
 	
     let slider1 = document.createElement("input");
+	slider1.style.position = 'absolute';
+	slider1.style.margin = 'auto';
+	slider1.style.top = '33%';
+	slider1.style.left = '0';
+	slider1.style.right = '0';
+	slider1.style.zIndex = '100';
     slider1.setAttribute("type", "range");
     document.getElementById("game").appendChild(slider1);
 	
@@ -206,7 +212,7 @@ const gravityInit = (testOutput) => {
 	}
 	//TEST FUNCTIONS
 	function runTests() {
-		dbOut("RUNNING TESTS", false, "#gravOut");
+		dbOut("Gravity Tests: ", true, "#gravOut");
 		//test getmagnitude
 		//test subtractpositions
 		//test subtractvectors

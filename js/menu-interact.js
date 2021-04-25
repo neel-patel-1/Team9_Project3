@@ -93,9 +93,14 @@ document.querySelector('#select_test').addEventListener('click', () => {
     document.querySelector('#testDiv').hidden = false;
 
     tictactoeinit(true);
+    dbOut('-----------------', true, '#space1');
     snakeInit(true);
+    dbOut('-----------------', true, '#space2')
     matchingInit(true);
+    dbOut('-----------------', true, '#space3')
     gravityInit(true);
+    dbOut('-----------------', true, '#space4')
+    ballInit(true);
 })
 
 let txtOut = [];
