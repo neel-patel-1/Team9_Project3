@@ -1,5 +1,5 @@
 //add event listener for ball button
-const gravityInit = () => {
+const gravityInit = (testOutput) => {
     //clear child elements of game div
 	
 
@@ -14,16 +14,16 @@ const gravityInit = () => {
     slider1.setAttribute("type", "range");
     document.getElementById("game").appendChild(slider1);
 	
-	let testButton = document.createElement("input");
-	testButton.setAttribute("type", "button");
-	testButton.setAttribute("value", "One-click Test");
-	document.getElementById("game").appendChild(testButton);
+	// let testButton = document.createElement("input");
+	// testButton.setAttribute("type", "button");
+	// testButton.setAttribute("value", "One-click Test");
+	// document.getElementById("game").appendChild(testButton);
 	
 	
     //initialize camera, scene, renderer, add Orbital Controls
   
     const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.set(0,0,3);
+    camera.position.set(0,0,10);
     camera.lookAt(0,0,0);
 
     const scene =  new THREE.Scene();
@@ -48,7 +48,10 @@ const gravityInit = () => {
 		renderer = new THREE.WebGLRenderer();
     		renderer.setSize( window.innerWidth*0.75, window.innerHeight*0.75);
     		document.getElementById("game").appendChild( renderer.domElement );
-
+			document.querySelector('canvas').style.position = 'absolute';
+			document.querySelector('canvas').style.margin = 'auto';
+			document.querySelector('canvas').style.left = '0';
+			document.querySelector('canvas').style.right = '0';
 		light = new THREE.HemisphereLight( 0xffffff, 0x130820, 1 );
 		scene.add( light );
 
@@ -198,10 +201,12 @@ const gravityInit = () => {
 	}
 
 
-
+	if(testOutput === true){
+		runTests();
+	}
 	//TEST FUNCTIONS
-	testButton.onclick = function() {
-  		 console.log("RUNNING TESTS");
+	function runTests() {
+		dbOut("RUNNING TESTS", false, "#gravOut");
 		//test getmagnitude
 		//test subtractpositions
 		//test subtractvectors
@@ -211,12 +216,12 @@ const gravityInit = () => {
 		//clear scene
 		scene.remove.apply(scene, scene.children);
 		
-		console.log("addBall() Tests --");
-		console.log("numBalls increases after one addBall() call - ");
+		dbOut("addBall() Tests --", false, "#gravOut");
+		dbOut("numBalls increases after one addBall() call - ", false, "#gravOut");
 		addBall();
 		test(numBalls==1);
 
-		console.log("numBalls does not increase after 5 addBall()s have been called - ");
+		dbOut("numBalls does not increase after 5 addBall()s have been called - ", false, "#gravOut");
 		addBall();
 		addBall();
 		addBall();
@@ -225,59 +230,66 @@ const gravityInit = () => {
 		addBall();
 		test(numBalls==temp_num_balls);
 
-		console.log("getMagnitude(vector) Tests -- ");
-		console.log("returns 0 when [0,0,0] is passed - ");
+		dbOut("getMagnitude(vector) Tests -- ", false, "#gravOut");
+		dbOut("returns 0 when [0,0,0] is passed - ", false, "#gravOut");
 		test(getMagnitude([0,0,0])==0);
 		
-		console.log("returns 1 when [1,0,0] is passed - ");
+		dbOut("returns 1 when [1,0,0] is passed - ", false, "#gravOut");
 		test(getMagnitude([1,0,0])==1);
-		console.log("returns 1 when [0,1,0] is passed - ");
+		dbOut("returns 1 when [0,1,0] is passed - ", false, "#gravOut");
 		test(getMagnitude([0,1,0])==1);
-		console.log("returns 1 when [0,0,1] is passed - ");
+		dbOut("returns 1 when [0,0,1] is passed - ", false, "#gravOut");
 		test(getMagnitude([0,0,1])==1);
 		
 		
 
-		console.log("subtractPositions() Tests -- ");
-		console.log("returns 0 when passed the same position object twice - ");
+		dbOut("subtractPositions() Tests -- ", false, "#gravOut");
+		dbOut("returns 0 when passed the same position object twice - ", false, "#gravOut");
 		let pos1 = {x: 2, y: 3, z: 3};
 		let result = subtractPositions(pos1, pos1);
 		test(result[0] == 0 && result[1] == 0 && result[2] == 0);
 	
-		console.log("subtractVectors() Tests -- ");
-		console.log("returns 0 when passed the same vector twice - ");
+		dbOut("subtractVectors() Tests -- ", false, "#gravOut");
+		dbOut("returns 0 when passed the same vector twice - ", false, "#gravOut");
 		let v = [2, 3, 4];
 		result = subtractVectors(v,v);
 		test(result[0] == 0 && result[1] == 0 && result[2] == 0);
 
 
-		console.log("dotProduct() Tests -- ");
-		console.log("returns 0 when passed [0,0,1] and [0,1,0] - ");
+		dbOut("dotProduct() Tests -- ", false, "#gravOut");
+		dbOut("returns 0 when passed [0,0,1] and [0,1,0] - ", false, "#gravOut");
 		test(dot([0,0,1], [0,1,0])==0);
-		console.log("returns 1 when passed [0,0,1] and [0,0,1] - ");
+		dbOut("returns 1 when passed [0,0,1] and [0,0,1] - ", false, "#gravOut");
 		test(dot([0,0,1], [0,0,1])==1);
 
 	
-		console.log("scalar() Tests -- ");
-		console.log("returns [0,0,0] when passed 0 and [5,5,5] - ");
+		dbOut("scalar() Tests -- ", false, "#gravOut");
+		dbOut("returns [0,0,0] when passed 0 and [5,5,5] - ", false, "#gravOut");
 		result = scalar(0, [5,5,5]);
 		test(result[0] == 0 && result[1] == 0 && result[2] == 0);
 		
-		console.log("returns [5,5,5] when passed 1 and [5,5,5]");
+		dbOut("returns [5,5,5] when passed 1 and [5,5,5] - ", false, "#gravOut");
 		result = scalar(1, [5,5,5]);
 		test(result[0] == 5 && result[1] == 5 && result[2] == 5);
 		
 		
-		window.location.reload()
+		// window.location.reload()
 	} 
 	
 	function test(condition){
 		if(condition){
-			console.log("PASSED");
+			dbOut("PASSED", true, "#gravOut");
 		}else{
-			console.log("FAILED");
+			dbOut("FAILED",true, "#gravOut");
 		}
 	}
+
+	window.addEventListener('resize', onWindowResize, false);
+	function onWindowResize(){
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth*.75, window.innerHeight*.75 );
+    }
 	
 }
 

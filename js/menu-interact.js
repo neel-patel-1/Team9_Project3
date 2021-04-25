@@ -95,7 +95,7 @@ document.querySelector('#select_test').addEventListener('click', () => {
     tictactoeinit(true);
     snakeInit(true);
     matchingInit(true);
-
+    gravityInit(true);
 })
 
 let txtOut = [];
