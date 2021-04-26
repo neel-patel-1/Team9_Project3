@@ -10,13 +10,11 @@ Neel:
 3/30: 2 hrs Color Matching for tiles, keeping track of flipped
 3/31: 1 hrs fixing color matching
 4/1:  1 hrs Win screen
-
 4/11: GUI Additions(DropDown menu) - 2 hrs
 4/12: GUI Styling (Coloring) adding button functionality - 1 hrs
-
 4/14: Worked on physics for possible new game 
-
 4/20: Started snake game - 1 hrs
 4/21: Snake Game - 3 hrs
 4/23: Added Tests to TicTacToe, Matching, and Snake ~3 hrs
 4/24: Refining GUI and styling, implementing global one-click test - 2 hrs
+4/25: Project video ~ 3 hours

@@ -3,3 +3,6 @@ Estimated Hours per Widget: 5-7h
 Estimated Time for additional documentation/artifacts/UML Diagrams: 5-7h
 
 Assuming 5 Widgets, Estimate Time is ~50 person hours
+Using the Agile Story Method, Combining the time it takes to both make games (from previous game development)
+&& the time it took to implement a UI we were able to come up with the above Estimate
+Implementing two more higher quality games could take an additional 10-15 hrs
